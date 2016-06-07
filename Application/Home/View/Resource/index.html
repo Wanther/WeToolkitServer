@@ -1,0 +1,30 @@
+<extend name="Public/base"/>
+
+<block name="script">
+<script type="text/javascript">
+(function($){
+	$(function() {
+		function loadTag(callback) {
+
+		}
+
+		function loadResource(callback) {
+
+		}
+
+
+	});
+})(jQuery);
+</script>
+</block> 
+
+<block name="content">
+<div>
+	<volist name="tagList" id="tag">
+	<span class="label">{$tag.name}</span>&nbsp;
+	</volist> 
+</div>
+<div>
+	content
+</div>
+</block>

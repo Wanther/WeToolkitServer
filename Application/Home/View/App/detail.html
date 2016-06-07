@@ -1,0 +1,133 @@
+<extend name="Public/base"/>
+
+<block name="style">
+<style type="text/css">
+.dl-horizontal dt{
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+.dl-horizontal dd{
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+#page_control{
+	margin-left: 180px;
+}
+#show_more,#loading,#no_more{
+	display: none;
+}
+#show_more{
+	cursor: pointer;
+}
+</style>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+$(function(){
+
+	var logLoadConfig = {
+		appId: {$app.id},
+		start: 0,
+		limit: 20,
+	};
+
+	$('#show_more').click(function(){
+		loadLogList(renderLogList);
+	});
+
+	loadLogList(renderLogList);
+
+	function loadLogList(callback) {
+		$.ajax("{:U('App/log_list')}", {
+			beforeSend: function() {showPageOperate('loading')},
+			data: {appId: logLoadConfig.appId, start: logLoadConfig.start},
+			success: callback
+		});
+	}
+
+	function renderLogList(result) {
+		if (result.data.length < logLoadConfig.limit) {
+			showPageOperate('no_more');
+		} else {
+			showPageOperate('show_more');
+		}
+
+		var html = '';
+		for (var i = 0; i < result.data.length; i++) {
+			var log = result.data[i];
+
+			html += '<dt>';
+			html += '<span class="label';
+			if (logLoadConfig.start == 0 && i == 0) {
+				html += ' label-success';
+			};
+			html += '">' + log.created + '</span>';
+			html += '</dt>';
+			html += '<dd>';
+			if (log.ver_name) {
+				html += '<span class="label';
+				if (logLoadConfig.start == 0 && i == 0) {
+					html += ' label-info';
+				}
+				html += '">v' + log.ver_name + '</span> ';
+			}
+			if (log.server_env) {
+				html += '<span class="label';
+				if (logLoadConfig.start == 0 && i == 0) {
+					html += ' label-info';
+				}
+				html += '">' + log.server_env_txt + '</span> ';
+			}
+			html += log.msg;
+			html += '</dd>';
+		}
+
+		$('#log_list_container').append($(html));
+
+		logLoadConfig.start += result.data.length;
+
+	}
+
+	function showPageOperate(who) {
+		var els = ['show_more', 'loading', 'no_more'];
+		for (var e in els) {
+			if (who == els[e]) {
+				$('#' + who).show();
+			} else {
+				$('#' + els[e]).hide();
+			}
+		}
+
+	}
+
+});
+</script>
+</block>
+
+<block name="content">
+	<div class="span3">
+		<ul class="thumbnails">
+			<li>
+				<div class="text-center">
+					<img src="__ROOT__{$app.qrcode_url}"/>
+
+					<h3>{$app.name}</h3>
+
+					<p>扫描或者<a href="__ROOT__{$app.pkg_path}" role="button">点击下载</a></p>
+					
+					<p class="text-error">仅用于内部测试</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="span9">
+		<h4>更新日志</h4>
+		<dl id="log_list_container" class="dl-horizontal">
+			
+		</dl>
+		<div id="page_control"><span id="show_more">点击显示更多</span><span id="loading">加载中...</span><span id="no_more">没有更多了</span></div>
+	</div>
+	
+</block>

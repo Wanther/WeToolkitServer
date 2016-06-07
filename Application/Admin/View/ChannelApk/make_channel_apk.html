@@ -1,0 +1,51 @@
+<extend name="Public/base" />
+
+<block name="style">
+<style type="text/css">
+.dl-horizontal dt{
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+.dl-horizontal dd{
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+dt{
+	font-weight: normal;
+}
+</style>
+</block>
+
+<block name="content">
+
+	<form action="{:U('ChannelApk/make_channel_apk')}" method="post" enctype="multipart/form-data" class="form-horizontal">
+
+	<bs:controlGroup field="sourceApk" label="原始包"> 
+		<input type="file" name="sourceApk" />
+		<span class="help-block"><small>没有添加渠道标识的包，一般使用官方包</small></span>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="channel" label="渠道标识">
+		<input type="text" name="channel" value="{$data.channel}"/>
+	</bs:controlGroup> 
+
+	<div class="control-group">
+		<div class="controls">
+			<input type="submit" class="btn btn-primary" value="生成" />
+		</div>
+	</div>
+
+	</form>
+
+	<hr />
+
+	<div>
+		<dl class="dl-horizontal">
+			<dd>生成历史</dd>
+			<volist name="dataList" id="data">
+			<dt>{$data.time|date='Y-m-d H:i:s',###}</dt>
+			<dd><a href="__PUBLIC__/Uploads/App/channelApk/{$data.fileName}">{$data.fileName}</a></dd>
+			</volist> 
+		</dl>
+	</div>
+</block>

@@ -1,0 +1,1 @@
+ALTER TABLE `t_admin_user` ADD COLUMN `name` VARCHAR(32) NOT NULL DEFAULT '-';

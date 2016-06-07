@@ -1,0 +1,106 @@
+<taglib name="bs" />
+<extend name="Public/base"/>
+
+<block name="script">
+<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.bs2.min.js?v=<?php echo time();?>"></script>
+<script type="text/javascript">
+(function(){
+	$(function(){
+		$('#color_convert').click(function(){
+			var value = $.trim($('#color_value').val());
+
+			$('#color_value').val(value);
+
+			if (!value.match("^[0-9a-fA-F]{6,8}$")) {
+				alert('请输入正确的颜色值');
+				return;
+			}
+
+			for (var i = 0, len = 8 - value.length; i < len; i++) {
+				value = '0' + value;
+			}
+
+			var result = '';
+			for (var i = 0; i < value.length; i += 2) {
+				if (i > 0) {
+					result += ',';
+				}
+				result += parseInt(value.substring(i, i + 2), 16);
+			}
+
+			$('#color_result').val(result);
+			$('#color_result').css('background-color', '#' + value.substring(2));
+		});
+
+		$('#check_native').click(function(){
+			if (window.UdaNative) {
+				alert('Y');
+			} else {
+				alert('N');
+			}
+		});
+
+		$("#apk").uploadify({
+			'height': 30,
+			'width'	: 160,
+			'swf': '__STATIC__/uploadify/uploadify.swf',
+			'uploader': '{:U("Toolkit/get_apk_info")}',
+			'fileObjName': 'apk',
+			'buttonClass': 'btn btn-primary',
+			'multi': true,
+			'queueID': 'apk_queue_container',
+			//'uploadLimit': 5,
+			//'queueSizeLimit': 5,
+			'fileSizeLimit': '50MB',
+			'buttonText': '上传APK检查APK信息',
+			'fileTypeExts': '*.apk',
+			'fileTypeDesc': 'APK',
+			'removeTimeout': 1,
+			'onUploadSuccess': function(file, data, response){
+				var info = $.parseJSON(data);
+				var alertString = '';
+				alertString += '包名：' + info.package;
+				alertString += '\n版本号：' + info.ver_code;
+				alertString += '\n版本名称：' + info.ver_name;
+				if (info.server_env) {
+					alertString += '\n环境：' + info.server_env;
+				}
+				if (info.channel) {
+					alertString += '\n渠道：' + info.channel;
+				}
+				alert(alertString);
+				
+			},
+			'onUploadError': function(file, errorCode, errorMsg, errorString){
+				alert(file.name + " 上传失败 " + errorCode + " " + errorMsg + " " + errorString);
+			},
+			'onFallback': function(){
+				alert('请先安装Flash插件');
+			}
+		});
+	});
+})(jQuery);
+</script>
+</block>
+
+<block name="content">
+
+	<div class="input-prepend input-append">
+		<span class="add-on">#</span><input type="text" id="color_value" placeholder="00bde5" value="" />
+		<button type="button" id="color_convert" class="btn"><span class="icon-exchange"></span> 转换</button>
+		<input type="text" id="color_result" value="" readonly class="add-on" style="text-shadow:none;" />
+	</div>
+
+	<hr />
+
+	<a id="check_native" class="btn btn-primary" href="javascript:;">点击检查是否从优答App访问</a>
+
+	<hr />
+
+	<input type="file" id="apk"/>
+	<div id="apk_queue_container"></div>
+
+	<hr />
+
+</block>
+

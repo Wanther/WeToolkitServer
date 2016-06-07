@@ -1,0 +1,17 @@
+<extend name="Public/base"/>
+
+<block name="content">
+	<ul class="thumbnails">
+	<volist name="appList" id="app">
+		<li>
+			<a href="{:U('App/detail', array('id'=>$app['id']))}">
+				<div class="thumbnail">
+					<img src="__ROOT__{$app.qrcode_url}">
+					<h3 class="text-center">{$app.name}</h3>
+				</div>
+			</a>
+		</li>
+	</volist> 
+	</ul>
+	
+</block>

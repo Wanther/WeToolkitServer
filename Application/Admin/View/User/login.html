@@ -1,0 +1,64 @@
+<taglib name="bs" />
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<title>微学明日</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link type="text/css" rel="stylesheet" href="__STATIC__/bootstrap-2.3.2/css/bootstrap.min.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome.min.css" />
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome-ie7.min.css">
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="__CSS__/style.css" />
+<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
+<style type="text/css">
+.panel-login{
+	max-width: 500px;
+	margin: 0 auto;
+}
+</style>
+<script type="text/javascript" src="__STATIC__/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="__STATIC__/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<!--[if lt IE 9]>
+<script src="__STATIC__/bootstrap-2.3.2/js/html5shiv.min.js"></script>
+<![endif]-->
+</head>
+<body>
+	<div class="container">
+		<div class="panel-login">
+
+			<bs:actionError />
+
+			<form action="{:U('User/login')}" method="post" class="form-horizontal">
+
+				<bs:controlGroup field="username" label="用户名">
+					<input type="text" name="username" value="{$data.username|default=''}" />
+				</bs:controlGroup> 
+
+				<bs:controlGroup field="password" label="密码">
+					<input type="password" name="password" />
+				</bs:controlGroup> 
+
+				<div class="control-group">
+					<div class="controls">
+						<input type="submit" class="btn btn-primary span2" value="登录"/>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<if condition="APP_DEBUG eq false"> 
+	<script type="text/javascript">
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?d89bbb8b77a16f531f3aa74cc25b944c";
+		var s = document.getElementsByTagName("script")[0]; 
+		s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	</if> 
+</body>
+</html>

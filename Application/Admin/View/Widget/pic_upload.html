@@ -1,0 +1,46 @@
+<input type="file" id="{$name}_upload"/>
+<input type="hidden" id="{$name}" name="{$name}" value='{$value}' />
+<span class="help-block"><small>支持多张上传，最多{$limit}张</small></span>
+<div id="{$name}_queue_container" style="position:absolute;right:0;top:0;z-index:999;"></div>
+<div id="{$name}_item_container"></div>
+<script type="text/javascript">
+(function($){
+	$(function(){
+		var imgExplorer = new ImageExplorer({container: '#{$name}_item_container', picsHolder: '#{$name}', countLimit: {$limit}});
+
+		$("#{$name}_upload").uploadify({
+			'height': 30,
+			'width'	: 80,
+			'swf': '__STATIC__/uploadify/uploadify.swf',
+			'uploader': '{$upload}',
+			'fileObjName': 'fileUpload',
+			'buttonClass': 'btn btn-primary',
+			'multi': true,
+			'queueID': '{$name}_queue_container',
+			//'uploadLimit': 5,
+			//'queueSizeLimit': 5,
+			'fileSizeLimit': '2MB',
+			'buttonText': '上传图片',
+			'fileTypeExts': '*.jpg; *.png; *.gif; *.jpeg',
+			'fileTypeDesc': 'JPG,PNG,GIF,JPEG',
+			'removeTimeout': 1,
+			'onUploadSuccess': function(file, data, response){
+				var info = $.parseJSON(data);
+				if(info.status == 0){
+					if(!imgExplorer.addItem(info)){
+						$('#{$name}_upload').uploadify('cancel', '*');
+					}
+				}else{
+					alert(info.info);
+				}
+			},
+			'onUploadError': function(file, errorCode, errorMsg, errorString){
+				alert(file.name + " 上传失败 " + errorCode + " " + errorMsg + " " + errorString);
+			},
+			'onFallback': function(){
+				alert('请先安装Flash插件');
+			}
+		});
+	});
+})(jQuery);
+</script>

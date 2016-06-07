@@ -1,0 +1,50 @@
+<extend name="Public/base"/>
+
+<block name="content">
+
+	<div class="btn-group pull-right" style="margin-bottom:20px">
+		<a href="{:U('AppRelease/add')}" class="btn app-btn"><i class="icon-plus"></i> 新增</a>
+		<a href="{:U('AppRelease/change_status', array('status'=>'Y'))}" class="btn app-btn" target="#data-form" confirm="确定失效选中记录？"><i class="icon-ban-circle"></i> 失效</a>
+		<a href="{:U('AppRelease/change_status', array('status'=>'N'))}" class="btn app-btn" target="#data-form"><i class="icon-ok-circle"></i> 生效</a>
+	</div>
+
+	<form action="{:U('AppRelease/lists')}" method="post" role="form" id="data-form">
+
+		<table class="table table-hover table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th class="column-check">
+						<input type="checkbox" check-group=":checkbox[name='id[]']"/>
+					</th>
+					<th>标识</th>
+					<th>名称</th>
+					<th>平台</th>
+					<th>失效</th>
+					<th>顺序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<volist name="dataList" id="data">
+				<tr>
+					<td>
+						<input type="checkbox" name="id[]" value="{$data.id}"/>
+					</td>
+					<td>{$data.code}</td>
+					<td><a href="{:U('AppRelease/edit', array('id'=>$data['id']))}">{$data.name}</a></td>
+					<td>{$data.platform|lookup_value="PLATFORM",###}</td>
+					<td>{$data.inactive}</td>
+					<td>{$data.seq_num}</td>
+					<td>
+						<a href="{:U('AppRelease/release', array('id'=>$data['id']))}" class="btn btn-mini btn-primary app-btn">更新</a>
+						<a href="{:U('AppRelease/qrcode_reset', array('id'=>$data['id']))}" class="btn btn-mini btn-normal app-btn">重置二维码</a>
+					</td>
+				</tr>
+				</volist> 
+			</tbody>
+		</table>
+
+	</form>
+	
+</block>

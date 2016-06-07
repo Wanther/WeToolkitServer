@@ -1,0 +1,76 @@
+<extend name="Public/base" />
+
+<block name="style">
+<style type="text/css">
+.controls div{
+	padding-top: 5px;
+	margin-bottom: 5px;
+}
+</style>
+</block>
+
+<block name="content">
+	<form action="{:U('DeviceInfo/edit')}" method="post" class="form-horizontal">
+
+	<bs:controlGroup field="id" label="ID">
+		<div>{$data.id}</div>
+		<input type="hidden" name="id" value="{$data.id}" />
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="device_id" label="设备ID">
+		<div>{$data.device_id|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="android_id" label="Android ID">
+		<div>{$data.android_id|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="mac_address" label="MAC地址">
+		<div>{$data.mac_address|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="serial_num" label="序列号">
+		<div>{$data.serial_num|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="phone_type" label="机型">
+		<div>{$data.phone_type|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="os_ver" label="操作系统版本">
+		<div>{$data.os_ver|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="sdk_ver" label="SDK版本">
+		<div>{$data.sdk_ver|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="screen_w,screen_h" label="分辨率">
+		<div>{$data.screen_w}*{$data.screen_h}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="density" label="屏幕密度">
+		<div>{$data.density}({$data.density|lookup_value='SCREEN_DENSITY',###})</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="owner" label="设备所属">
+		{:W('Form/lookupSelect', array('owner', $data['owner'], 'OWNER_TYPE'))} 
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="user" label="使用者">
+		<input type="text" name="user" id="user" value="{$data.user|default=''}" />
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="desc_txt" label="备注">
+		<input type="text" name="desc_txt" id="desc_txt" value="{$data.desc_txt|default=''}" />
+	</bs:controlGroup> 
+
+	<div class="control-group">
+		<div class="controls">
+			<input type="submit" class="btn btn-primary" value="保存" />
+			<a href="{:get_return_url(U('DeviceInfo/lists'))}" class="btn btn-info">返回</a>
+		</div>
+	</div>
+
+	</form>
+</block>

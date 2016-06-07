@@ -1,0 +1,64 @@
+{
+	"goods": [
+		{
+			"kind": 1,
+			"kind_name": "四级",
+			"data": [
+				{
+					"id": 1,
+					"app_store_id": "com.Uda100.youDaCET.4001",
+					"cover": "http://img3.imgtn.bdimg.com/it/u=1394464154,2722562143&fm=21&gp=0.jpg",
+					"title": "四级两周冲刺课程",
+					"description": "6份四级真题套卷+5份新东方四级模拟套卷",
+					"price": 25,
+					"is_purchased": false,
+					"detail_url": "http://www.baidu.com",
+					"desc_type": 2,
+					"status": 0
+				},
+				{
+					"id": 2,
+					"app_store_id": "com.Uda100.youDaCET.4001",
+					"cover": "http://img3.imgtn.bdimg.com/it/u=1394464154,2722562143&fm=21&gp=0.jpg",
+					"title": "11份四级模拟题套卷",
+					"description": "6份四级真题套卷+5份新东方四级模拟套卷",
+					"price": 6,
+					"is_purchased": false,
+					"detail_url": "http://www.baidu.com",
+					"desc_type": 1,
+					"status": 0
+				}
+			]
+		},
+		{
+			"kind": 2,
+			"kind_name": "六级",
+			"data": [
+				{
+					"id": 1,
+					"app_store_id": "com.Uda100.youDaCET.4001",
+					"cover": "http://img3.imgtn.bdimg.com/it/u=1394464154,2722562143&fm=21&gp=0.jpg",
+					"title": "六级两周冲刺课程",
+					"description": "6份六级真题套卷+5份新东方六级模拟套卷",
+					"price": 25,
+					"is_purchased": false,
+					"detail_url": "http://www.baidu.com",
+					"desc_type": 2,
+					"status": 2
+				},
+				{
+					"id": 2,
+					"app_store_id": "com.Uda100.youDaCET.4001",
+					"cover": "http://img3.imgtn.bdimg.com/it/u=1394464154,2722562143&fm=21&gp=0.jpg",
+					"title": "11份六级模拟题套卷",
+					"description": "6份六级真题套卷+5份新东方六级模拟套卷",
+					"price": 6,
+					"is_purchased": false,
+					"detail_url": "http://www.baidu.com",
+					"desc_type": 1,
+					"status": 1
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<title>{$title|default="优答"}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link type="text/css" rel="stylesheet" href="__STATIC__/bootstrap-2.3.2/css/bootstrap.min.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome.min.css" />
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome-ie7.min.css">
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="__CSS__/style.css" />
+<block name="style"></block> 
+<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
+<script type="text/javascript" src="__STATIC__/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="__STATIC__/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+<!--[if lt IE 9]>
+<script src="__STATIC__/bootstrap-2.3.2/js/html5shiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+window.App = {
+	ROOT: "__ROOT__"
+};
+</script>
+<block name="script"></block> 
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="#">微学明日</a>
+
+				<ul class="nav pull-right">
+					<li>
+						<a href="http://cli.im" target="_blank"><i class="icon-qrcode"></i> 二维码生成</a>
+					</li>
+					<li>
+						<a href="{:U('Admin/Index')}">后台管理</a>
+					</li>
+				</ul>
+
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li <if condition="$curNav eq 1">class="active"</if>><a href="{:U('Index/index')}">产品</a></li>
+						<li <if condition="$curNav eq 2">class="active"</if>><a href="{:U('Toolkit/index')}">工具</a></li>
+						<li <if condition="$curNav eq 3">class="active"</if>><a href="{:U('Resource/index')}">资源</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<!--
+			<div class="span2">
+				
+			</div>
+			-->
+			<div class="span12">
+				<block name="content"></block> 
+			</div>
+		</div>
+	</div>
+
+	<!--
+	<div id="footer">
+		<div class="container-fluid">&copy; --</div>
+	</div>
+	-->
+
+	<block name="footscript"></block> 
+	<if condition="APP_DEBUG eq false"> 
+	<script type="text/javascript">
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?d89bbb8b77a16f531f3aa74cc25b944c";
+		var s = document.getElementsByTagName("script")[0]; 
+		s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	</if> 
+</body>
+</html>
