@@ -5,10 +5,10 @@ return array(
 	'DEFAULT_MODULE'	=>	'Home',
 	'URL_MODEL'	=>	2,
 	'DB_TYPE'	=>	'mysql',
-	'DB_HOST'	=>	'10.155.50.1',
+	'DB_HOST'	=>	'localhost',
 	'DB_NAME'	=>	'welearn_toolkit',
-	'DB_USER'	=>	'wanghe',
-	'DB_PWD'	=>	'aA111111',
+	'DB_USER'	=>	'toolkit',
+	'DB_PWD'	=>	'abcd,1234!@#$',
 	'DB_PORT'	=>	3306,
 	'DB_PREFIX'	=>	't_',
 
