@@ -8,9 +8,9 @@ class ResourceController extends Controller {
     	$this->curNav = 3;
 
         //$tagList = M('Tag')->field('id,pid,name')->select();
-        $tagList = array(array('name'=>'人物'), array('name'=>'地点'));
+        //$tagList = array(array('name'=>'人物'), array('name'=>'地点'));
 
-        $this->assign('tagList', $tagList);
+        //$this->assign('tagList', $tagList);
 
         $this->display();
     }
