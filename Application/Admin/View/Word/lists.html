@@ -1,0 +1,284 @@
+<extend name="Public/base"/>
+
+<block name="style">
+<style type="text/css">
+.column{
+	height: 600px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+#rule_word_list,#no_rule_word_list{
+	padding-top: 30px;
+	list-style: none;
+}
+#rule_list{
+	padding-top: 30px;
+}
+#loading{
+	text-align: center;
+	width: 3000px;
+	height: 3000px;
+	line-height: 3000px;
+	opacity: 0.5;
+	position: absolute;
+	z-index: 999;
+}
+#loading img{
+	margin: auto;
+}
+.list-title{
+	position: fixed;
+	height: 30px;
+	line-height: 30px;
+}
+.rule-leaf:focus{
+	background-color: #0088cc;
+}
+</style>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+var curRequest;
+var curRuleId;
+
+(function(jQuery){
+	$(function(){
+		var offset = $('.column:first').position().top + 50;
+		$('.column').height($(document).height() - offset);
+
+		var rules = {$ruleList|json_encode};
+		var domStr = renderRuleTree(rules);
+		
+		$('#rule_list').append($(domStr));
+
+		$('a.rule-leaf').click(function() {
+			curRuleId = $(this).attr('rule_id');
+			$('#rule_name').text($(this).attr('rule_name'));
+			loadRuleWordList(curRuleId, renderRuleWordList);
+		});
+
+		loadNoRuleWordList();
+
+		$('#no_rule_word_set').click(function() {
+			if (!curRuleId) {
+				alert('未选择任何规则');
+				return;
+			}
+
+			var selectedWordList = '';
+			$('.no-rule-word:checked').each(function() {
+				selectedWordList += $(this).val() + ',';
+			});
+			if (selectedWordList == '') {
+				alert('未选择任何单词');
+				return;
+			}
+			
+			submitWordOfRule(curRuleId, selectedWordList);
+		});
+
+		$('#rule_word_unset').click(function() {
+			if (!curRuleId) {
+				alert('未选择任何规则');
+				return;
+			}
+
+			var selectedWordList = '';
+			$('.rule-word:checked').each(function() {
+				selectedWordList += $(this).val() + ',';
+			});
+			if (selectedWordList == '') {
+				alert('未选择任何单词');
+				return;
+			}
+			
+			submitWordOfRule(0, selectedWordList);
+		});
+
+		$('#rule_word_refresh').click(function() {
+			if (!curRuleId) {
+				alert('未选择任何规则');
+				return;
+			}
+			loadRuleWordList(curRuleId, renderRuleWordList);
+		});
+
+		$('#no_rule_word_refresh').click(function() {
+			loadNoRuleWordList();
+		});
+
+	});
+
+	function submitWordOfRule(ruleId, wordList) {
+		if (curRequest) {
+			curRequest.abort();
+		}
+
+		curRequest = $.ajax({
+			url: "{:U('Word/assignRule')}",
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				ruleId: ruleId,
+				wordList: wordList
+			},
+			success: function(data) {
+				loadRuleWordList(curRuleId, function(data){
+					renderRuleWordList(data);
+					loadNoRuleWordList();
+				});
+			},
+			error: function(e) {
+				hideProgressDialog();
+				alert(e);
+			},
+			beforeSend: function() {
+				showProgressDialog();
+			}
+		});
+	}
+
+	function renderRuleTree(ruleList) {
+		var domStr = '<ul>';
+		for(var i = 0; i < ruleList.length; i++) {
+			var rule = ruleList[i];
+			var hasChildren = rule.children != undefined && rule.children.length > 0;
+			domStr += '<li>';
+			if (!hasChildren) {
+				domStr += '<a href="javascript:void(0);" class="btn-link rule-leaf" rule_id="' + rule.id + '" rule_name="' + rule.name + '">';
+			}
+			domStr += rule.name;
+
+			if (rule.remark != null) {
+				domStr += ' - ' + rule.remark;
+			}
+
+			if (hasChildren) {
+				domStr += renderRuleTree(rule.children);
+			}
+
+			if (!hasChildren) {
+				domStr += '</a>';
+			}
+
+			domStr += '</li>';
+		}
+		domStr += '</ul>';
+
+		return domStr;
+	}
+
+	function loadRuleWordList(ruleId, callback) {
+		$('#rule_word_list').empty();
+
+		if (curRequest) {
+			curRequest.abort();
+		}
+
+		curRequest = $.ajax({
+			url: "{:U('Word/ruleWordList')}" + '/ruleId/' + ruleId,
+			dataType: 'json',
+			success: function(data) {
+				hideProgressDialog();
+				callback(data);
+			},
+			error: function(e) {
+				hideProgressDialog();
+				alert(e);
+			},
+			beforeSend: function() {
+				showProgressDialog();
+			}
+		});
+	}
+
+	function renderRuleWordList(data) {
+		$('#rule_word_list').empty();
+		var domStr = '';
+		for(var i = 0; i < data.length; i++) {
+			var word = data[i];
+			domStr += '<li>';
+			domStr += '<input type="checkbox" value="' + word.name + '" class="rule-word"/>' + word.name;
+			domStr += '</li>';
+		}
+		$('#rule_word_list').append($(domStr));
+	}
+
+	function loadNoRuleWordList() {
+		$('#no_rule_word_list').empty();
+		$.getJSON('{:U("Word/NoRuleWordList")}', renderNoRuleWordList);
+	}
+
+	function renderNoRuleWordList(data) {
+		$('#no_rule_word_list').empty();
+		var domStr = '';
+		for(var i = 0; i < data.length; i++) {
+			var word = data[i];
+			domStr += '<li>';
+			domStr += '<input type="checkbox" value="' + word.name + '" class="no-rule-word"/>' + word.name;
+			domStr += '</li>';
+		}
+		$('#no_rule_word_list').append($(domStr));
+		$('#no_rule_count').text(data.length);
+	}
+
+	function showProgressDialog() {
+
+		var centerY = $(window).height() / 2 + $(document).scrollTop();
+		var centerX = $(window).width() / 2;
+
+		var loading = $('#loading');
+
+		loading.css('left', centerX - loading.width() / 2);
+		loading.css('top', centerY - loading.height() / 2);
+
+		$('html body').css('overflow', 'hidden');
+		$('#loading').show();
+	}
+
+	function hideProgressDialog() {
+		$('html body').css('overflow', 'auto');
+		$('#loading').hide();
+	}
+
+})();
+</script>
+</block>
+
+<block name="content">
+<div class="row">
+	
+	<div class="span4 column">
+		<div class="list-title">
+			<label class="label label-info">当前规则：<span id="rule_name"></span></labal>
+		</div>
+		<div id="rule_list">
+			
+		</div>
+	</div>
+	<div class="span4 column">
+		<div class="list-title">
+			<label class="label label-info">已关联单词列表</label>
+			<a id="rule_word_unset" href="javascript:void(0);" class="btn btn-small btn-primary">取消关联</a>
+			<a id="rule_word_refresh" href="javascript:void(0);" class="btn btn-small">刷新</a>
+		</div>
+		<ul id="rule_word_list">
+			
+		</ul>
+	</div>
+	<div class="span4 column">
+		<div class="list-title">
+			<label class="label label-info">未关联单词列表[<span id="no_rule_count"></span>]</label>
+			<a id="no_rule_word_set" href="javascript:void(0);" class="btn btn-small btn-primary">关联</a>
+			<a id="no_rule_word_refresh" href="javascript:void(0);" class="btn btn-small">刷新</a>
+		</div>
+		<ul id='no_rule_word_list'>
+			
+		</ul>
+	</div>
+</div>
+<div id="loading" class='hide'>
+	<img src="__STATIC__/images/loading.gif"/>
+</div>
+</block>

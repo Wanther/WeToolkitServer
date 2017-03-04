@@ -3,7 +3,7 @@ return array(
 	'MODULE_ALLOW_LIST'	=>	array('Home', 'Api', 'Admin'),
 	'MODULE_DENY_LIST'	=>	array('Common', 'Runtime', 'Data'),
 	'DEFAULT_MODULE'	=>	'Home',
-	'URL_MODEL'	=>	2,
+	'URL_MODEL'	=>	1,
 	'DB_TYPE'	=>	'mysql',
 	'DB_HOST'	=>	'localhost',
 	'DB_NAME'	=>	'welearn_toolkit',

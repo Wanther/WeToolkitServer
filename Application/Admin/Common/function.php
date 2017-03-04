@@ -110,3 +110,28 @@ function desialize_pic($filesStr){
 function get_upload_app_file_name($app) {
 	return "{$app['code']}_{$app['platform']}";
 }
+
+function list_to_tree($list, $pk='id', $pid='pid', $child='_child', $root=0) {
+    $tree = array();// 创建Tree
+    if(is_array($list)) {
+        // 创建基于主键的数组引用
+        $refer = array();
+        foreach ($list as $key => $data) {
+            $refer[$data[$pk]] =& $list[$key];
+        }
+        
+        foreach ($list as $key => $data) {
+            // 判断是否存在parent
+            $parentId = $data[$pid];
+            if ($root == $parentId) {
+                $tree[$data[$pk]] =& $list[$key];
+            }else{
+                if (isset($refer[$parentId])) {
+                    $parent =& $refer[$parentId];
+                    $parent[$child][] =& $list[$key];
+                }
+            }
+        }
+    }
+    return $tree;
+}

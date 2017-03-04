@@ -84,6 +84,19 @@ return array(
 					'action'	=>	'DeviceInfo/lists'
 				)
 			)
+		),
+		array(
+			'id'	=>	10004,
+			'name'	=>	'内容',
+			'icon'	=>	'icon-bug',
+			'children'	=>	array(
+				array(
+					'id'	=>	401,
+					'name'	=>	'单词',
+					'icon'	=>	'icon-mobile-phone',
+					'action'	=>	'Word/lists'
+				)
+			)
 		)
 	)
 );

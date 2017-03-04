@@ -65,16 +65,12 @@ window.App = {
 			<div class="span2">
 				{:W('App/showNavLeft', array($_LOGINUSER_, $_CURVIEW_))} 
 			</div>
-			<div class="span10">
+			<div class="span10 content-container">
 				<bs:actionError /> 
 				<bs:actionMessage /> 
 				<block name="content"></block> 
 			</div>
 		</div>
-	</div>
-
-	<div id="footer">
-		<div class="container-fluid">&copy; 微学明日 2014</div>
 	</div>
 
 	<block name="footscript"></block> 
