@@ -18,6 +18,10 @@ class WordController extends AdminController {
 		$this->display('lists');
 	}
 
+	public function ruleList() {
+		
+	}
+
 	public function ruleWordList($ruleId) {
 		$wordList = M('Word')->where(array('rid'=>$ruleId))->order('name', 'asc')->select();
 		$this->ajaxReturn($wordList);

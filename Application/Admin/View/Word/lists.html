@@ -195,28 +195,46 @@ var curRuleId;
 
 	function renderRuleWordList(data) {
 		$('#rule_word_list').empty();
+		$('#rule_word_count').text(0);
+
+		if (!data) {
+			return;
+		}
+
 		var domStr = '';
 		for(var i = 0; i < data.length; i++) {
 			var word = data[i];
 			domStr += '<li>';
+			domStr += '<label class="checkbox">';
 			domStr += '<input type="checkbox" value="' + word.name + '" class="rule-word"/>' + word.name;
+			domStr += '</label>'
 			domStr += '</li>';
 		}
 		$('#rule_word_list').append($(domStr));
+		$('#rule_word_count').text(data.length);
 	}
 
 	function loadNoRuleWordList() {
 		$('#no_rule_word_list').empty();
+		$('#no_rule_count').text(0);
 		$.getJSON('{:U("Word/NoRuleWordList")}', renderNoRuleWordList);
 	}
 
 	function renderNoRuleWordList(data) {
 		$('#no_rule_word_list').empty();
+		$('#no_rule_count').text(0);
+
+		if (!data) {
+			return;
+		}
+
 		var domStr = '';
 		for(var i = 0; i < data.length; i++) {
 			var word = data[i];
 			domStr += '<li>';
+			domStr += '<label class="checkbox">'
 			domStr += '<input type="checkbox" value="' + word.name + '" class="no-rule-word"/>' + word.name;
+			domStr += '</label>';
 			domStr += '</li>';
 		}
 		$('#no_rule_word_list').append($(domStr));
@@ -259,7 +277,7 @@ var curRuleId;
 	</div>
 	<div class="span4 column">
 		<div class="list-title">
-			<label class="label label-info">已关联单词列表</label>
+			<label class="label label-info">已关联单词列表[<span id="rule_word_count">-</span>]</label>
 			<a id="rule_word_unset" href="javascript:void(0);" class="btn btn-small btn-primary">取消关联</a>
 			<a id="rule_word_refresh" href="javascript:void(0);" class="btn btn-small">刷新</a>
 		</div>
