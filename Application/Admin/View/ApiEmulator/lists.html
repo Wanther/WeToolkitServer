@@ -22,6 +22,7 @@
 					</th>
 					<th>ID</th>
 					<th>描述</th>
+					<th>匹配</th>
 					<th>创建人</th>
 					<th>创建时间</th>
 					<th>最后更新人</th>
@@ -40,6 +41,7 @@
 					<td>
 						<a href="{:U('ApiEmulator/edit', array('id'=>$data['id']))}">{$data.desc_txt}</a>
 					</td>
+					<td>{$data.path_match}</td>
 					<td>{$data.created_by}</td>
 					<td>{$data.created|date='Y-m-d H:i:s',###}</td>
 					<td>{$data.last_upd_by}</td>

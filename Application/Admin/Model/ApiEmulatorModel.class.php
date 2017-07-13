@@ -8,6 +8,7 @@ class ApiEmulatorModel extends Model{
 	protected $patchValidate = true;
 
 	protected $_validate = array(
+		array('path_match', '', '路径匹配不能重复', self::VALUE_VALIDATE, 'unique'),
 		array('desc_txt', 'require', '请填写描述，方便查询', self::MUST_VALIDATE),
 		array('content', 'require', '请填写返回报文', self::MUST_VALIDATE)
 	);

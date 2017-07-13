@@ -18,6 +18,45 @@ class ApiEmulatorController extends Controller {
 		$this->ajaxReturn(json_decode(htmlspecialchars_decode($api['content'])));
 	}
 
+	public function match_output() {
+		$path = array_slice(I('path.'), 2);
+		$path = join('/', $path);
+		$ApiEmulator = M('ApiEmulator');
+		$apiList = $ApiEmulator->field('path_match,content')->where('path_match is not null')->order('path_match')->select();
+		if (!empty($apiList)) {
+			foreach ($apiList as $api) {
+				if ($this->isPathMatch($path, $api['path_match'])) {
+					$this->ajaxReturn(json_decode(htmlspecialchars_decode($api['content'])));
+					return;
+				}
+			}
+		}
+		$this->error(404);
+	}
+
+	protected function isPathMatch($path, $rule) {
+		$paths = explode('/', $path);
+		$rules = explode('/', $rule);
+
+		if (count($paths) != count($rules)) {
+			return false;
+		}
+
+		for ($i=0; $i < count($path); $i++) { 
+			$p = $paths[$i];
+			$r = $rules[$i];
+
+			if ($p == $r || preg_match('/\{.+\}/', $r)) {
+				continue;
+			} else {
+				return false;
+			}
+
+		}
+
+		return true;
+	}
+
 	public function test_jpush() {
 		Vendor('Psr.Log.LoggerInterface');
 

@@ -7,6 +7,11 @@
 		<input type="hidden" name="id" value="{$data.id}" />
 	</notempty> 
 
+	<bs:controlGroup field="path_match" label="匹配路径">
+		<input type="text" name="path_match" value="{$data.path_match|default=''}"/>
+		<span class="help-block">book/{id}/saygoodbye</span>
+	</bs:controlGroup> 
+
 	<bs:controlGroup field="desc_txt" label="描述">
 		<input type="text" name="desc_txt" value="{$data.desc_txt|default=''}"/>
 	</bs:controlGroup>

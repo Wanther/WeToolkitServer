@@ -20,7 +20,7 @@ class ApiEmulatorController extends AdminController {
 		$Page->setConfig('theme', '%UP_PAGE% %FIRST%  %LINK_PAGE% %END% %DOWN_PAGE%');
 
 		$ApiEmulator->alias('e')
-			->field("e.id,e.desc_txt,e.created,e.last_upd,uc.name created_by,uu.name last_upd_by")
+			->field("e.id,e.desc_txt,e.path_match,e.created,e.last_upd,uc.name created_by,uu.name last_upd_by")
 			->join("__ADMIN_USER__ uc on uc.id=e.created_by")
 			->join("__ADMIN_USER__ uu on uu.id=e.last_upd_by")
 			->where($condition);
