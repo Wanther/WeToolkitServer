@@ -21,8 +21,9 @@ class ApiEmulatorController extends Controller {
 	public function match_output() {
 		$path = array_slice(I('path.'), 2);
 		$path = join('/', $path);
+
 		$ApiEmulator = M('ApiEmulator');
-		$apiList = $ApiEmulator->field('path_match,content')->where('path_match is not null')->order('path_match')->select();
+		$apiList = $ApiEmulator->field('path_match,content')->where('path_match is not null')->order('created desc')->select();
 		if (!empty($apiList)) {
 			foreach ($apiList as $api) {
 				if ($this->isPathMatch($path, $api['path_match'])) {
@@ -35,6 +36,7 @@ class ApiEmulatorController extends Controller {
 	}
 
 	protected function isPathMatch($path, $rule) {
+
 		$paths = explode('/', $path);
 		$rules = explode('/', $rule);
 
@@ -42,7 +44,7 @@ class ApiEmulatorController extends Controller {
 			return false;
 		}
 
-		for ($i=0; $i < count($path); $i++) { 
+		for ($i=0; $i < count($paths); $i++) { 
 			$p = $paths[$i];
 			$r = $rules[$i];
 
