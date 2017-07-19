@@ -1,3 +1,4 @@
+<taglib name="bs"/>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -9,9 +10,9 @@
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome-ie7.min.css">
 <![endif]-->
+<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
 <link type="text/css" rel="stylesheet" href="__CSS__/style.css" />
 <block name="style"></block> 
-<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
 <script type="text/javascript" src="__STATIC__/jquery/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="__STATIC__/bootstrap-2.3.2/js/bootstrap.min.js"></script>
 <!--[if lt IE 9]>
@@ -47,6 +48,7 @@ window.App = {
 						<li <if condition="$curNav eq 1">class="active"</if>><a href="{:U('Index/index')}">产品</a></li>
 						<li <if condition="$curNav eq 2">class="active"</if>><a href="{:U('Toolkit/index')}">工具</a></li>
 						<li <if condition="$curNav eq 3">class="active"</if>><a href="{:U('Resource/index')}">资源</a></li>
+						<li <if condition="$curNav eq 4">class="active"</if>><a href="{:U('Promotion/index')}">推广</a></li>
 					</ul>
 				</div>
 			</div>

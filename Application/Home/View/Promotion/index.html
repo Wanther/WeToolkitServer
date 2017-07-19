@@ -1,0 +1,28 @@
+<extend name="Public/base"/>
+
+<block name="content">
+
+	<ul>
+	<volist id="promotion" name="promotions">
+		<li>
+			<span>{$key}</span>:<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="{$promotion}" target="_blank">{$promotion}</a>
+		</li>
+	</volist>
+	</ul>
+
+	<form action="{:U('Promotion/index')}" method="post" class="form-horizontal">
+
+	<bs:controlGroup field="who" label="推广人">
+		<input type="text" name="who" value=""/>
+		<span class="help-block"><small>建议使用手机号码</small></span>
+	</bs:controlGroup> 
+
+	<div class="control-group">
+		<div class="controls">
+			<input type="submit" class="btn btn-primary" value="提交" />
+		</div>
+	</div>
+
+	</form>
+</block>
