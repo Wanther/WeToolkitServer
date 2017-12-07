@@ -11,7 +11,8 @@ class MapController extends Controller {
     }
 
     public function geodata($id) {
-    	//$dataList = M('MapNode')->field(array('geodata'=>'geometry'), false)->where("pid=%d AND pid<>id", $id)->select();
+    	$parent = M('MapNode')->field('geodata', true)->find($id);
+
         $dataList = M('MapNode')->alias('a')
             ->field(array('a.geodata'=>'geometry', 'COUNT(b.id)'=>'count'))
             ->join("__MAP_NODE__ b ON b.type=100 AND b.path like CONCAT(a.path, '/%')", "LEFT")
@@ -19,11 +20,9 @@ class MapController extends Controller {
             ->group("a.id")
             ->select();
 
-    	// if (empty($dataList)) {
-    	// 	$dataList = array();
-    	// 	$data = M('MapNode')->field(array('geodata'=>'geometry'), false)->find($id);
-    	// 	array_push($dataList, $data);
-    	// }
+    	$pointList = M('MapNode')->field(array('geodata'=>'geometry'))->where("type=100 AND path like '{$parent['path']}/%'")->select();
+
+        $dataList = array_merge($dataList, $pointList);
 
         foreach ($dataList as &$value) {
             $value['geometry'] = json_decode($value['geometry']);
@@ -35,9 +34,9 @@ class MapController extends Controller {
     public function get_children($pid) {
 
     	if ($pid == '#') {
-    		$children = M('MapNode')->field('geodata', true)->where('id=pid')->select();
+    		$children = M('MapNode')->field('geodata', true)->where('id=pid')->order('CONVERT(name USING gbk)')->select();
     	} else {
-    		$children = M('MapNode')->field('geodata', true)->where("pid=%d and id<>pid", $pid)->select();
+    		$children = M('MapNode')->field('geodata', true)->where("pid=%d and id<>pid", $pid)->order('CONVERT(name USING gbk)')->select();
     	}
 
     	if (empty($children)) {
@@ -47,6 +46,9 @@ class MapController extends Controller {
 
     	foreach ($children as &$value) {
     		$value['children'] = $value['type'] == 100 ? false : true;
+            if ($value['type'] == 100) {
+                $value['icon'] = 'jstree-file';
+            }
     		$value['text'] = $value['name'];
 
     		if ($pid == '#') {

@@ -32,9 +32,11 @@
         $('#map_container').height(viewportHeight);
         $('#side_menu').height(viewportHeight);
 
-        $('#myModal').on('show', function() {
+        $('#myModal').on('shown', function() {
             var mapStyle = Pref().get('mapStyle', 'normal');
-            $("input[name='mapStyle'][value='" + mapStyle + "']").attr('checked', true);
+            console.log(mapStyle);
+            //$(":radio[name='mapStyle']").attr('checked', false);
+            $(":radio[name='mapStyle'][value='" + mapStyle + "']").prop('checked', true);
 
             var colorFrom = Pref().get('colorFrom', '#ffffff');
             var colorTo = Pref().get('colorTo', '#00bde5');
@@ -42,26 +44,32 @@
             $('#lowcolor').val(colorFrom);
             $('#highcolor').val(colorTo);
 
-        }).on('hidden', function() {
+            $('#point_color').val(Pref().get('pointColor', '#ff9900'));
+            $('#point_size').val(Pref().get('pointSize', 4));
+
+        });
+
+        $('#setting_confirm').click(function() {
             var mapStyle = $("input[name='mapStyle']:checked").val();
             Pref().set('mapStyle', mapStyle);
             map.setMapStyle({
                 style: mapStyle
             });
 
+            var pointColor = $('#point_color').val();
+            var pointSize = $('#point_size').val();
             var colorFrom = $('#lowcolor').val();
             var colorTo = $('#highcolor').val();
+            Pref().set('pointColor', pointColor);
+            Pref().set('pointSize', pointSize);
             Pref().set('colorFrom', colorFrom);
             Pref().set('colorTo', colorTo);
-            mapvLayer.update({
-                gradient: {
-                    0: colorFrom,
-                    1: colorTo
-                },
-                globalAlpha: 0.8,
-                draw: 'intensity'
-            });
-        });
+            
+            if (mapvLayer) {
+                mapvLayer.destroy();
+                mapvLayer = null;
+            }
+        })
 
         $('#tree_panel').on('changed.jstree', function(e, data) {
             var node = data.instance.get_node(data.selected[0]);
@@ -79,7 +87,6 @@
         });
 
         var mapvLayer;
-        var mapvTextLayer;
 
 		var map = new BMap.Map("map_container", {
             enableMapClick: false
@@ -92,20 +99,15 @@
 			style: Pref().get('mapStyle', 'normal')
 		});
 
-        map.addEventListener("click", function(e) {
-            console.log(e.point.lng + ":" + e.point.lat);
-        });
+        // map.addEventListener("click", function(e) {
+        //     console.log(e.point.lng + ":" + e.point.lat);
+        // });
 
 		function loadArea(id, text, callback) {
 
             if (mapvLayer) {
                 mapvLayer.destroy();
                 mapvLayer = null;
-            }
-
-            if (mapvTextLayer) {
-                mapvTextLayer.destroy();
-                mapvTextLayer = null;
             }
 
 			var loadUrl = "{:U('Map/geodata')}?id=" + id;
@@ -121,10 +123,12 @@
             mapvLayer = new mapv.baiduMapLayer(map, dataSet, {
                 gradient: {
                     0: Pref().get('colorFrom', '#ffffff'),
-                    1: Pref().get('colorTo', '#ff0000')
+                    1: Pref().get('colorTo', '#00bed5')
                 },
                 globalAlpha: 0.8,
-                draw: 'intensity'
+                draw: 'intensity',
+                fillStyle: Pref().get('pointColor', '#ff9900'),
+                size: Pref().get('pointSize', 4)
             });
             
 		}
@@ -221,11 +225,24 @@
                         从 <input type="text" id="lowcolor" class="input-small" /> 渐变到 <input type="text" id="highcolor" class="input-small" />
                     </div>
                 </div>
+
+                <div class="control-group">
+                    <label class="control-label">点颜色</label>
+                    <div class="controls">
+                        <input type="text" id="point_color" class="input-small" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">点大小</label>
+                    <div class="controls">
+                        <input type="text" id="point_size" class="input-small" />
+                    </div>
+                </div>
             </form>
         </div>
         <div class="modal-footer">
             <!--<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>-->
-            <button class="btn btn-primary" data-dismiss="modal">确定</button>
+            <button class="btn btn-primary" data-dismiss="modal" id="setting_confirm">确定</button>
         </div>
     </div>
 </block>
