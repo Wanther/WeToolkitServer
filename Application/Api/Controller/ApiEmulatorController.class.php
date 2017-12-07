@@ -13,6 +13,12 @@ use JPush\Exception\APIRequestException;
 
 class ApiEmulatorController extends Controller {
 	public function output($id) {
+
+		$authToken = $_SERVER['HTTP_AUTHORIZATION'];
+		if ($authToken == 'Bearer dc66c256ebb6376b30f5b9b97a3c6467de0d1ff7') {
+			header('HTTP/1.0 401 Unauthorized');
+			exit();
+		}
 		$ApiEmulator = M('ApiEmulator');
 		$api = $ApiEmulator->field('content')->find($id);
 		$this->ajaxReturn(json_decode(htmlspecialchars_decode($api['content'])));

@@ -1,0 +1,231 @@
+<extend name="Public/base"/> 
+
+<block name="style">
+<link rel="stylesheet" type="text/css" href="__STATIC__/jstree/themes/default/style.min.css">
+<style type="text/css">
+#side_menu {
+    overflow-y: scroll;
+}
+#settings {
+    padding: 10px;
+}
+.modal-body .form-horizontal .controls {
+    margin-left: 100px;
+}
+.modal-body .form-horizontal .control-label {
+    width: 80px;
+}
+</style>
+</block>
+
+<block name="script">
+<script type="text/javascript" src="__STATIC__/jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=iExp2mgSz2lHiDQtXfRZ01TktNaGdF61"></script>
+<script type="text/javascript" src="__STATIC__/baidu-map/mapv.min.js"></script>
+<script type="text/javascript" src="__STATIC__/jstree/jstree.min.js"></script>
+<script type="text/javascript">
+(function($) {
+
+	$(function() {
+
+        var viewportHeight = $(window).height() - 100;
+        $('#map_container').height(viewportHeight);
+        $('#side_menu').height(viewportHeight);
+
+        $('#myModal').on('show', function() {
+            var mapStyle = Pref().get('mapStyle', 'normal');
+            $("input[name='mapStyle'][value='" + mapStyle + "']").attr('checked', true);
+
+            var colorFrom = Pref().get('colorFrom', '#ffffff');
+            var colorTo = Pref().get('colorTo', '#00bde5');
+
+            $('#lowcolor').val(colorFrom);
+            $('#highcolor').val(colorTo);
+
+        }).on('hidden', function() {
+            var mapStyle = $("input[name='mapStyle']:checked").val();
+            Pref().set('mapStyle', mapStyle);
+            map.setMapStyle({
+                style: mapStyle
+            });
+
+            var colorFrom = $('#lowcolor').val();
+            var colorTo = $('#highcolor').val();
+            Pref().set('colorFrom', colorFrom);
+            Pref().set('colorTo', colorTo);
+            mapvLayer.update({
+                gradient: {
+                    0: colorFrom,
+                    1: colorTo
+                },
+                globalAlpha: 0.8,
+                draw: 'intensity'
+            });
+        });
+
+        $('#tree_panel').on('changed.jstree', function(e, data) {
+            var node = data.instance.get_node(data.selected[0]);
+            loadArea(node.id, node.text, showArea);
+        }).jstree({
+            core: {
+                multiple: false,
+                data: {
+                    "url": "{:U('Map/get_children')}",
+                    "data": function(node) {
+                        return {"pid": node.id}
+                    }
+                }
+            }
+        });
+
+        var mapvLayer;
+        var mapvTextLayer;
+
+		var map = new BMap.Map("map_container", {
+            enableMapClick: false
+        });
+		var point = new BMap.Point(116, 40);
+		map.centerAndZoom(point, 5);
+		map.enableScrollWheelZoom(false);
+		
+		map.setMapStyle({
+			style: Pref().get('mapStyle', 'normal')
+		});
+
+        map.addEventListener("click", function(e) {
+            console.log(e.point.lng + ":" + e.point.lat);
+        });
+
+		function loadArea(id, text, callback) {
+
+            if (mapvLayer) {
+                mapvLayer.destroy();
+                mapvLayer = null;
+            }
+
+            if (mapvTextLayer) {
+                mapvTextLayer.destroy();
+                mapvTextLayer = null;
+            }
+
+			var loadUrl = "{:U('Map/geodata')}?id=" + id;
+			$.getJSON(loadUrl, function(data) {
+                callback(text, data);
+			});
+		};
+
+		function showArea(text, geodata) {
+
+            var dataSet = new mapv.DataSet(geodata);
+            
+            mapvLayer = new mapv.baiduMapLayer(map, dataSet, {
+                gradient: {
+                    0: Pref().get('colorFrom', '#ffffff'),
+                    1: Pref().get('colorTo', '#ff0000')
+                },
+                globalAlpha: 0.8,
+                draw: 'intensity'
+            });
+            
+		}
+	});
+
+    function Pref() {
+        return {
+            get: function(key, defValue) {
+                var value = $.cookie(key);
+                if (value === undefined) {
+                    value = defValue;
+                }
+                return value;
+            },
+
+            set: function(key, value) {
+                $.cookie(key, value, {expires: 7});
+            }
+        };
+    }
+	
+})(jQuery);
+</script>
+</block> 
+
+<block name="content">
+    <div class="row-fluid">
+        <span class="span9">
+            <div id="map_container"></div>
+        </span>
+
+        <span class="span3">
+            <div id="side_menu">
+                <div id="settings">
+                    <button class="btn btn-mini" id="map_setting" data-toggle="modal" data-target="#myModal"><i class="icon-gear"></i> 地图设置</button>
+                </div>
+                <div id="tree_panel"></div>
+            </div>
+        </span>
+    </div>
+
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h5 id="myModalLabel">地图设置</h5>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">地图风格</label>
+                    <div class="controls">
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="normal" />默认
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="light" />清新蓝
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="dark" />黑夜
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="redalert" />红色警戒
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="googlelite" />精简
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="grassgreen" />自然绿
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="midnight" />午夜蓝
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="pink" />浪漫粉
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="darkgreen" />青春绿
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="bluish" />清新蓝绿
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="grayscale" />高端灰
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="mapStyle" value="hardedge" />强边界
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">区块颜色</label>
+                    <div class="controls">
+                        从 <input type="text" id="lowcolor" class="input-small" /> 渐变到 <input type="text" id="highcolor" class="input-small" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <!--<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>-->
+            <button class="btn btn-primary" data-dismiss="modal">确定</button>
+        </div>
+    </div>
+</block>
