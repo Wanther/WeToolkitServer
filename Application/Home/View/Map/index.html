@@ -203,15 +203,14 @@
                 if (Pref.get('focusMode', true) == "false" ? false : true) {
                     AppMap.prototype.showClip.call(appMap, data);
                 }
-            });
 
-            if (Pref.get('showPoint', true) == "false" ? false : true) {
-                loadUrl = "{:U('Map/geodata')}?id=" + id + "&type=point";
-                $.getJSON(loadUrl, function(data) {
-                    AppMap.prototype.showPoint.call(appMap, data);
-                });
-            }
-            
+                if (Pref.get('showPoint', true) == "false" ? false : true) {
+                    loadUrl = "{:U('Map/geodata')}?id=" + id + "&type=point";
+                    $.getJSON(loadUrl, function(data) {
+                        AppMap.prototype.showPoint.call(appMap, data);
+                    });
+                }
+            });
 		};
 
 	});
