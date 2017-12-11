@@ -26,6 +26,122 @@
 <script type="text/javascript">
 (function($) {
 
+    // Preferences
+    function Pref() {}
+
+    Pref.get = function(key, defValue) {
+        var value = $.cookie(key);
+        if (value === undefined) {
+            value = defValue;
+        }
+        return value;
+    };
+
+    Pref.set = function(key, value) {
+        $.cookie(key, value, {expires: 7});
+    };
+
+    // AppMap
+    function AppMap(container) {
+
+        this.container = container;
+
+        this.init();
+    }
+
+    AppMap.prototype.init = function() {
+
+        if (this.map) {
+            return;
+        }
+
+        this.map = new BMap.Map(this.container, {
+            enableMapClick: false
+        });
+        var point = new BMap.Point(106.962497, 38.208726);
+        this.map.centerAndZoom(point, 5);
+        this.map.enableScrollWheelZoom(false);
+
+        this.map.setMapStyle({
+            styleJson: [{
+                "featureType": "highway",
+                "elementType": "all",
+                "stylers": {
+                          "color": "#d9ead3ff"
+                }
+            }]
+        });
+    };
+
+    AppMap.prototype.showClip = function(geodata) {
+        if (this.clipLayer) {
+            this.clipLayer.destroy();
+            delete this.clipLayer;
+        }
+
+        var dataSet = new mapv.DataSet(geodata);
+
+        this.clipLayer = new mapv.baiduMapLayer(this.map, dataSet, {
+            fillStyle: '#000000',
+            globalAlpha: 0.8,
+            draw: 'clip'
+        });
+    }
+
+    AppMap.prototype.showRegion = function(geodata) {
+        
+        if (this.regionLayer) {
+            this.regionLayer.destroy();
+            delete this.regionLayer;
+        }
+
+        var dataSet = new mapv.DataSet(geodata);
+
+        this.regionLayer = new mapv.baiduMapLayer(this.map, dataSet, {
+            gradient: {
+                0: '#ffffff',
+                1: '#00bde5'
+            },
+            globalAlpha: 0.8,
+            draw: 'intensity'
+            //draw: 'category'
+        });
+    }
+
+    AppMap.prototype.showPoint = function(geodata) {
+        if (this.pointLayer) {
+            this.pointLayer.destroy();
+            delete this.pointLayer;
+        }
+
+        var dataSet = new mapv.DataSet(geodata);
+
+        this.pointLayer = new mapv.baiduMapLayer(this.map, dataSet, {
+            fillStyle: 'rgba(255, 155, 0, 0.6)',
+            shadowColor: 'rgba(255, 155, 0, 0.6)',
+            shadowBlur: 30,
+            size: 5,
+            draw: 'simple'
+        });
+    }
+
+    AppMap.prototype.clear = function() {
+        if (this.pointLayer) {
+            this.pointLayer.destroy();
+            delete this.pointLayer;
+        }
+
+        if (this.regionLayer) {
+            this.regionLayer.destroy();
+            delete this.regionLayer;
+        }
+
+        if (this.clipLayer) {
+            this.clipLayer.destroy();
+            delete this.clipLayer;
+        }
+    }
+
 	$(function() {
 
         var viewportHeight = $(window).height() - 100;
@@ -33,47 +149,33 @@
         $('#side_menu').height(viewportHeight);
 
         $('#myModal').on('shown', function() {
-            var mapStyle = Pref().get('mapStyle', 'normal');
-            console.log(mapStyle);
-            //$(":radio[name='mapStyle']").attr('checked', false);
-            $(":radio[name='mapStyle'][value='" + mapStyle + "']").prop('checked', true);
 
-            var colorFrom = Pref().get('colorFrom', '#ffffff');
-            var colorTo = Pref().get('colorTo', '#00bde5');
+            var focusMode = Pref.get('focusMode', true);
+            $('#focus_mode').attr('checked', focusMode == "false" ? false : true);
 
-            $('#lowcolor').val(colorFrom);
-            $('#highcolor').val(colorTo);
+            var showRegion = Pref.get('showRegion', true);
+            $('#show_region').attr('checked', showRegion == "false" ? false : true);
 
-            $('#point_color').val(Pref().get('pointColor', '#ff9900'));
-            $('#point_size').val(Pref().get('pointSize', 4));
+            var showPoint = Pref.get('showPoint', true);
+            $('#show_point').attr('checked', showPoint == "false" ? false : true);
 
         });
 
         $('#setting_confirm').click(function() {
-            var mapStyle = $("input[name='mapStyle']:checked").val();
-            Pref().set('mapStyle', mapStyle);
-            map.setMapStyle({
-                style: mapStyle
-            });
 
-            var pointColor = $('#point_color').val();
-            var pointSize = $('#point_size').val();
-            var colorFrom = $('#lowcolor').val();
-            var colorTo = $('#highcolor').val();
-            Pref().set('pointColor', pointColor);
-            Pref().set('pointSize', pointSize);
-            Pref().set('colorFrom', colorFrom);
-            Pref().set('colorTo', colorTo);
+            var focusMode = $('#focus_mode').is(':checked');
+            var showRegion = $('#show_region').is(':checked');
+            var showPoint = $('#show_point').is(':checked');
+
+            Pref.set('focusMode', focusMode);
+            Pref.set('showRegion', showRegion);
+            Pref.set('showPoint', showPoint);
             
-            if (mapvLayer) {
-                mapvLayer.destroy();
-                mapvLayer = null;
-            }
         })
 
         $('#tree_panel').on('changed.jstree', function(e, data) {
             var node = data.instance.get_node(data.selected[0]);
-            loadArea(node.id, node.text, showArea);
+            loadData(node.id);
         }).jstree({
             core: {
                 multiple: false,
@@ -86,69 +188,33 @@
             }
         });
 
-        var mapvLayer;
+        var appMap = new AppMap('map_container');
 
-		var map = new BMap.Map("map_container", {
-            enableMapClick: false
-        });
-		var point = new BMap.Point(116, 40);
-		map.centerAndZoom(point, 5);
-		map.enableScrollWheelZoom(false);
-		
-		map.setMapStyle({
-			style: Pref().get('mapStyle', 'normal')
-		});
+		function loadData(id) {
 
-        // map.addEventListener("click", function(e) {
-        //     console.log(e.point.lng + ":" + e.point.lat);
-        // });
-
-		function loadArea(id, text, callback) {
-
-            if (mapvLayer) {
-                mapvLayer.destroy();
-                mapvLayer = null;
-            }
+            AppMap.prototype.clear.call(appMap);
 
 			var loadUrl = "{:U('Map/geodata')}?id=" + id;
+
 			$.getJSON(loadUrl, function(data) {
-                callback(text, data);
-			});
+                if (Pref.get('showRegion', true) == "false" ? false : true) {
+                    AppMap.prototype.showRegion.call(appMap, data);
+                }
+                if (Pref.get('focusMode', true) == "false" ? false : true) {
+                    AppMap.prototype.showClip.call(appMap, data);
+                }
+            });
+
+            if (Pref.get('showPoint', true) == "false" ? false : true) {
+                loadUrl = "{:U('Map/geodata')}?id=" + id + "&type=point";
+                $.getJSON(loadUrl, function(data) {
+                    AppMap.prototype.showPoint.call(appMap, data);
+                });
+            }
+            
 		};
 
-		function showArea(text, geodata) {
-
-            var dataSet = new mapv.DataSet(geodata);
-            
-            mapvLayer = new mapv.baiduMapLayer(map, dataSet, {
-                gradient: {
-                    0: Pref().get('colorFrom', '#ffffff'),
-                    1: Pref().get('colorTo', '#00bed5')
-                },
-                globalAlpha: 0.8,
-                draw: 'intensity',
-                fillStyle: Pref().get('pointColor', '#ff9900'),
-                size: Pref().get('pointSize', 4)
-            });
-            
-		}
 	});
-
-    function Pref() {
-        return {
-            get: function(key, defValue) {
-                var value = $.cookie(key);
-                if (value === undefined) {
-                    value = defValue;
-                }
-                return value;
-            },
-
-            set: function(key, value) {
-                $.cookie(key, value, {expires: 7});
-            }
-        };
-    }
 	
 })(jQuery);
 </script>
@@ -178,64 +244,24 @@
         <div class="modal-body">
             <form class="form-horizontal">
                 <div class="control-group">
-                    <label class="control-label">地图风格</label>
+                    <label class="control-label">专注模式</label>
                     <div class="controls">
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="normal" />默认
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="light" />清新蓝
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="dark" />黑夜
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="redalert" />红色警戒
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="googlelite" />精简
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="grassgreen" />自然绿
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="midnight" />午夜蓝
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="pink" />浪漫粉
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="darkgreen" />青春绿
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="bluish" />清新蓝绿
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="grayscale" />高端灰
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="mapStyle" value="hardedge" />强边界
+                        <label class="checkbox inline">
+                            <input type="checkbox" id="focus_mode" />开启
                         </label>
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label">区块颜色</label>
+                    <label class="control-label">显示</label>
                     <div class="controls">
-                        从 <input type="text" id="lowcolor" class="input-small" /> 渐变到 <input type="text" id="highcolor" class="input-small" />
-                    </div>
-                </div>
+                        <label class="checkbox inline">
+                            <input type="checkbox" id="show_region" />区域
+                        </label>
 
-                <div class="control-group">
-                    <label class="control-label">点颜色</label>
-                    <div class="controls">
-                        <input type="text" id="point_color" class="input-small" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">点大小</label>
-                    <div class="controls">
-                        <input type="text" id="point_size" class="input-small" />
+                        <label class="checkbox inline">
+                            <input type="checkbox" id="show_point" />点
+                        </label>
                     </div>
                 </div>
             </form>

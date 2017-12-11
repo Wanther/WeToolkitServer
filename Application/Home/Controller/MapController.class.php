@@ -10,22 +10,29 @@ class MapController extends Controller {
         $this->display();
     }
 
-    public function geodata($id) {
+    public function geodata($id, $type = 'region') {
+
     	$parent = M('MapNode')->field('geodata', true)->find($id);
 
-        $dataList = M('MapNode')->alias('a')
-            ->field(array('a.geodata'=>'geometry', 'COUNT(b.id)'=>'count'))
-            ->join("__MAP_NODE__ b ON b.type=100 AND b.path like CONCAT(a.path, '/%')", "LEFT")
-            ->where("a.pid=%d AND a.id<>a.pid", $id)
-            ->group("a.id")
-            ->select();
+        $dataList = null;
 
-    	$pointList = M('MapNode')->field(array('geodata'=>'geometry'))->where("type=100 AND path like '{$parent['path']}/%'")->select();
-
-        $dataList = array_merge($dataList, $pointList);
+        if ($type == 'region') {
+            $dataList = M('MapNode')->alias('a')
+                ->field(array('a.geodata'=>'geometry', 'COUNT(b.id)'=>'count'))
+                ->join("__MAP_NODE__ b ON b.type=100 AND b.path like CONCAT(a.path, '/%')", "LEFT")
+                ->where("a.pid=%d AND a.id<>a.pid", $id)
+                ->group("a.id")
+                //->having('count > 0')
+                ->select();
+        } elseif ($type == 'point') {
+            $dataList = M('MapNode')->field(array('geodata'=>'geometry'))->where("type=100 AND path like '{$parent['path']}/%'")->select();
+        }
 
         foreach ($dataList as &$value) {
             $value['geometry'] = json_decode($value['geometry']);
+            // if (isset($value['count']) && $value['count'] <= 0) {
+            //     $value['count'] = rand(1, 100);
+            // }
         }
 
     	$this->ajaxReturn($dataList);

@@ -97,6 +97,19 @@ return array(
 					'action'	=>	'Word/lists'
 				)
 			)
+		),
+		array(
+			'id'	=>	10005,
+			'name'	=>	'销售',
+			'icon'	=>	'icon-usd',
+			'children'	=>	array(
+				array(
+					'id'	=>	501,
+					'name'	=>	'地图分布',
+					'icon'	=>	'icon-map-marker',
+					'action'	=>	'Map/lists'
+				)
+			)
 		)
 	)
 );

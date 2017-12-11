@@ -1,0 +1,74 @@
+<extend name="Public/base"/>
+
+<block name="style">
+<link rel="stylesheet" type="text/css" href="__STATIC__/jstree/themes/default/style.min.css">
+</block>
+
+<block name="script">
+<script type="text/javascript" src="__STATIC__/jstree/jstree.min.js"></script>
+<script type="text/javascript">
+(function($) {
+	$(function() {
+		$('#tree_panel').on('changed.jstree', function(e, data) {
+            var node = data.instance.get_node(data.selected[0]);
+            loadEntityInfo(node.id);
+        }).jstree({
+            core: {
+                multiple: false,
+                data: {
+                    "url": "{:U('Home/Map/get_children')}",
+                    "data": function(node) {
+                        return {"pid": node.id}
+                    }
+                }
+            }
+        });
+
+        function loadEntityInfo(id) {
+        	$('#entity_info_conatiner').empty();
+
+        	$.getJSON("{:U('Map/info')}?id=" + id, function(data) {
+        		if (data.type == 'list') {
+        			renderEntityList(data.data);
+        		} else if (data.type == 'detail') {
+        			renderEntityInfo(data.data);
+        		}
+        	});
+        }
+
+        function renderEntityInfo(data) {
+        	var html = "<h3>" + data.name + "</h3><br/>";
+        	html += "<div>" + data.geodata + "</div>"
+        	$(html).appendTo($('#entity_info_conatiner'));
+        }
+
+        function renderEntityList(data) {
+        	if (!data) {
+        		return;
+        	}
+
+        	var html = "<div>"
+        	for (var i = 0, len = data.length; i < len; i++) {
+        		html += "<span>" + data[i].name + "</span><br/>";
+        	}
+        	html += "</div>";
+
+        	$(html).appendTo($('#entity_info_conatiner'));
+        }
+	});
+})(jQuery);
+</script>
+</block>
+
+<block name="content">
+
+	<div class="row-fluid">
+		<span class="span3">
+			<div id="tree_panel"></div>
+		</span>
+		<span class="span8">
+			<div id="entity_info_conatiner"></div>
+		</span>
+	</div>
+	
+</block>
