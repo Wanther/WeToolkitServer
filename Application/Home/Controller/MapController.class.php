@@ -12,7 +12,7 @@ class MapController extends Controller {
 
     public function geodata($id, $type = 'region') {
 
-    	$parent = M('MapNode')->field('geodata', true)->find($id);
+    	$parent = M('MapNode')->field('geodata', 'type', true)->find($id);
 
         $dataList = null;
 
@@ -25,14 +25,11 @@ class MapController extends Controller {
                 //->having('count > 0')
                 ->select();
         } elseif ($type == 'point') {
-            $dataList = M('MapNode')->field(array('geodata'=>'geometry'))->where("type=100 AND path like '{$parent['path']}/%'")->select();
+            $dataList = M('MapNode')->field(array('geodata'=>'geometry', 'name'=>'text'))->where("type=100 AND path like '{$parent['path']}/%'")->select();
         }
 
         foreach ($dataList as &$value) {
             $value['geometry'] = json_decode($value['geometry']);
-            // if (isset($value['count']) && $value['count'] <= 0) {
-            //     $value['count'] = rand(1, 100);
-            // }
         }
 
     	$this->ajaxReturn($dataList);

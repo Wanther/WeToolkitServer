@@ -95,6 +95,12 @@ return array(
 					'name'	=>	'单词',
 					'icon'	=>	'icon-mobile-phone',
 					'action'	=>	'Word/lists'
+				),
+				array(
+					'id'	=>	402,
+					'name'	=>	'成绩管理',
+					'icon'	=>	'icon-mobile-phone',
+					'action'	=>	'Achievement/lists'
 				)
 			)
 		),

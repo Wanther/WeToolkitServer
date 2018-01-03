@@ -41,6 +41,17 @@
         $.cookie(key, value, {expires: 7});
     };
 
+    Pref.getBool = function(key, defValue) {
+        var value = $.cookie(key);
+        if (value === undefined) {
+            value = defValue;
+        }
+
+        value = value == 'false' ? false : true
+
+        return value;
+    }
+
     // AppMap
     function AppMap(container) {
 
@@ -71,7 +82,23 @@
                 }
             }]
         });
+
+        var map = this.map;
+        var boundary = new BMap.Boundary();
+        boundary.get('商州区', function(rs) {
+            for (var i = 0, len = rs.boundaries.length; i < len; i++) {
+                var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000"}); //建立多边形覆盖物
+                map.addOverlay(ply);
+            }
+        });
     };
+
+    AppMap.prototype.addEventListener = function(event, callback) {
+        var appMap = this;
+        this.map.addEventListener(event, function(type, target) {
+            callback(appMap, type);
+        });
+    }
 
     AppMap.prototype.showClip = function(geodata) {
         if (this.clipLayer) {
@@ -106,12 +133,19 @@
             draw: 'intensity'
             //draw: 'category'
         });
+
+
     }
 
     AppMap.prototype.showPoint = function(geodata) {
         if (this.pointLayer) {
             this.pointLayer.destroy();
             delete this.pointLayer;
+        }
+
+        if (this.pointTextLayer) {
+            this.pointTextLayer.destroy();
+            delete this.pointTextLayer;
         }
 
         var dataSet = new mapv.DataSet(geodata);
@@ -123,6 +157,17 @@
             size: 5,
             draw: 'simple'
         });
+
+        // this.pointTextLayer = new mapv.baiduMapLayer(this.map, dataSet, {
+        //     draw: 'text',
+        //     //avoid: true,
+        //     size: 12,
+        //     font: '12px Arial',
+        //     fillStyle: 'black',
+        //     shadowColor: 'white',
+        //     shadowBlur: 10
+        // });
+        // this.pointTextLayer.hide();
     }
 
     AppMap.prototype.clear = function() {
@@ -150,14 +195,14 @@
 
         $('#myModal').on('shown', function() {
 
-            var focusMode = Pref.get('focusMode', true);
-            $('#focus_mode').attr('checked', focusMode == "false" ? false : true);
+            var focusMode = Pref.getBool('focusMode', true);
+            $('#focus_mode').attr('checked', focusMode);
 
-            var showRegion = Pref.get('showRegion', true);
-            $('#show_region').attr('checked', showRegion == "false" ? false : true);
+            var showRegion = Pref.getBool('showRegion', true);
+            $('#show_region').attr('checked', showRegion);
 
-            var showPoint = Pref.get('showPoint', true);
-            $('#show_point').attr('checked', showPoint == "false" ? false : true);
+            var showPoint = Pref.getBool('showPoint', true);
+            $('#show_point').attr('checked', showPoint);
 
         });
 
@@ -189,28 +234,50 @@
         });
 
         var appMap = new AppMap('map_container');
+        // appMap.addEventListener('zoomend', function(appMap, e) {
+        //     if (e.target.getZoom() >= 10) {
+        //         if (appMap.pointTextLayer) {
+        //             appMap.pointTextLayer.show();
+        //         }
+        //     } else {
+        //         if (appMap.pointTextLayer) {
+        //             appMap.pointTextLayer.hide();
+        //         }
+        //     }
+        // });
 
 		function loadData(id) {
 
             AppMap.prototype.clear.call(appMap);
 
-			var loadUrl = "{:U('Map/geodata')}?id=" + id;
+            var focusMode = Pref.getBool('focusMode', true);
+            var showRegion = Pref.getBool('showRegion', true);
+            var showPoint = Pref.getBool('showPoint', true);
 
-			$.getJSON(loadUrl, function(data) {
-                if (Pref.get('showRegion', true) == "false" ? false : true) {
-                    AppMap.prototype.showRegion.call(appMap, data);
-                }
-                if (Pref.get('focusMode', true) == "false" ? false : true) {
-                    AppMap.prototype.showClip.call(appMap, data);
-                }
+            if (focusMode || showRegion) {
+                var loadUrl = "{:U('Map/geodata')}?id=" + id;
 
-                if (Pref.get('showPoint', true) == "false" ? false : true) {
-                    loadUrl = "{:U('Map/geodata')}?id=" + id + "&type=point";
-                    $.getJSON(loadUrl, function(data) {
-                        AppMap.prototype.showPoint.call(appMap, data);
-                    });
-                }
-            });
+                $.getJSON(loadUrl, function(data) {
+                    if (showRegion) {
+                        AppMap.prototype.showRegion.call(appMap, data);
+                    }
+                    if (focusMode) {
+                        AppMap.prototype.showClip.call(appMap, data);
+                    }
+
+                    if (showPoint) {
+                        loadUrl = "{:U('Map/geodata')}?id=" + id + "&type=point";
+                        $.getJSON(loadUrl, function(data) {
+                            AppMap.prototype.showPoint.call(appMap, data);
+                        });
+                    }
+                });
+            } else if (showPoint) {
+                loadUrl = "{:U('Map/geodata')}?id=" + id + "&type=point";
+                $.getJSON(loadUrl, function(data) {
+                    AppMap.prototype.showPoint.call(appMap, data);
+                });
+            }
 		};
 
 	});

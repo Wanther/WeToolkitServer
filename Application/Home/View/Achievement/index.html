@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<title>成绩查询</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link type="text/css" rel="stylesheet" href="__STATIC__/bootstrap-2.3.2/css/bootstrap.min.css" media="screen"/>
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome-ie7.min.css">
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
+
+<script type="text/javascript" src="__STATIC__/jquery/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+$(function(){
+
+});
+</script>
+</head>
+<body>
+	<form action="{:U('Achievement/getQueryLink')}" method="post">
+		<fieldset>
+			<label>姓名</label>
+			<input type="text" name="name" />
+
+			<label>邮箱</label>
+			<input type="text" name="email" />
+
+			<br/>
+			<button type="submit" class="btn">获取查询连接</button>
+		</fieldset>
+	</form>
+</body>
+</html>
