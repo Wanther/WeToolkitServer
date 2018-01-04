@@ -85,11 +85,14 @@ class AchievementController extends AdminController{
 			$this->errorMessage('请选择要删除的记录', get_return_url(U('Achievement/lists')));
 		}
 
-		$Lookup = D('Achievement');
+		$Achievement = D('Achievement');
+		$AchievementItem = M('AchievementItem');
 
 		if(is_array($id)){
+			$AchievementItem->where(array('pid'=>array('IN', $id)))->delete();
 			$Achievement->where(array('id'=>array('IN', $id)))->delete();
 		}else{
+			$AchievementItem->where(array('pid'=>(int)$id))->delete();
 			$Achievement->where(array('id'=>(int)$id))->delete();
 		}
 
