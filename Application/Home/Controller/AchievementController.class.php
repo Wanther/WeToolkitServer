@@ -18,6 +18,8 @@ class AchievementController extends Controller {
     		$this->error('无法找到对应记录，请确认姓名和邮箱正确');
     	}
 
+        $parent = M('Achievement')->find($achievement['pid']);
+
     	$detail = json_decode($achievement['detail'], true);
     	unset($achievement['detail']);
 
@@ -36,8 +38,8 @@ class AchievementController extends Controller {
     	$mail->Username = 'wanghepro@163.com';
     	$mail->Password = 'wanghepro0507';
     	$mail->addAddress($achievement['email'], $achievement['name']);
-    	$mail->setFrom('wanghepro@163.com', '成绩查询系统');
-    	$mail->Subject = '成绩查询';
+    	$mail->setFrom('wanghepro@163.com', '成绩查询');
+    	$mail->Subject = $parent['name'];
     	$mail->isHTML(true);
     	$mail->Body = $message;
 
