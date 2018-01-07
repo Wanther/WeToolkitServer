@@ -1,25 +1,15 @@
 <extend name="Public/base"/>
 
-<block name="script">
-<script type="text/javascript">
-	$(function(){
-		$('.json-data').each(function(i, el) {
-			var json = $.parseJSON($(el).text());
-			var html = '';
-			for (var i = 0, size = json.length; i < size; i++) {
-				if (i > 0) {html += "|";}
-				html += '<span>' + json[i].name + '</span>=';
-				html += '<span>' + json[i].value + '</span>';
-			}
-			$(el).html(html);
-		});
-	});
-</script>
-</block>
-
 <block name="content">
 
-	<a href="#importDialog" role="button" class="btn" data-toggle="modal">导入</a>
+	<ul class="breadcrumb">
+		<li><a href="{:U('Achievement/lists')}">成绩管理</a> <span class="divider">/</span></li>
+		<li class="active">{$parent.name}</li>
+	</ul>
+
+	<a href="#importDialog" role="button" class="btn btn-primary pull-right" data-toggle="modal">导入</a>
+
+	<div class="clearfix" style="margin-bottom: 10px;"></div>
 
 	<table class="table table-hover table-bordered table-condensed">
 		<thead>
@@ -27,7 +17,9 @@
 				<th>姓名</th>
 				<th>手机号</th>
 				<th>邮箱</th>
-				<th>其他字段</th>
+				<volist name="columns" id="column">
+				<th>{$column.name}</th>
+				</volist>
 			</tr>
 		</thead>
 
@@ -37,7 +29,9 @@
 				<td>{$data.name}</td>
 				<td>{$data.phone}</td>
 				<td>{$data.email}</td>
-				<td class="json-data">{$data.detail}</td>
+				<volist name="data.detail" id="detail">
+				<td>{$detail.value}</td>
+				</volist>
 			</tr>
 			</volist> 
 		</tbody>

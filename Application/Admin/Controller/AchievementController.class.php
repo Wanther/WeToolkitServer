@@ -114,6 +114,17 @@ class AchievementController extends AdminController{
 
 		$dataList = $AchievementItem->limit($Page->firstRow, $Page->listRows)->select();
 
+		if (!empty($dataList)) {
+			$first = $dataList[0];
+			$columns = json_decode($first['detail'], true);
+
+			$this->assign('columns', $columns);
+
+			foreach ($dataList as &$value) {
+				$value['detail'] = json_decode($value['detail'], true);
+			}
+		}
+
 		$this->assign('parent', $parent);
 		$this->assign('dataList', $dataList);
 		$this->assign('page', $Page->show());

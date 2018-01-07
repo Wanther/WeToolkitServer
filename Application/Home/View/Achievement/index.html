@@ -2,27 +2,53 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8" />
-<title>成绩查询</title>
+<title>{$achievement.name}成绩查询</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link type="text/css" rel="stylesheet" href="__STATIC__/bootstrap-2.3.2/css/bootstrap.min.css" media="screen"/>
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome-ie7.min.css">
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
+<style type="text/css">
+.panel-login{
+	max-width: 500px;
+	margin: 0 auto;
+}
+</style>
 
 </head>
 <body>
-	<form action="{:U('Achievement/getQueryLink')}" method="post">
-		<fieldset>
-			<label>姓名</label>
-			<input type="text" name="name" />
+	<div class="container">
+		<div class="panel-login">
 
-			<label>邮箱</label>
-			<input type="text" name="email" />
+			<form action="{:U('Achievement/getQueryLink')}" method="post" class="form-horizontal">
+				<div class="control-group">
+					<div class="controls">
+						<h4>{$achievement.name}成绩查询</h4>
+					</div>
+				</div>
 
-			<br/>
-			<button type="submit" class="btn">发送成绩</button>
-		</fieldset>
-	</form>
+				<div class="control-group">
+					<label class="control-label" for="name">姓名</label>
+					<div class="controls">
+						<input type="text" id="name" placeholder="姓名">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="email">邮箱</label>
+					<div class="controls">
+						<input type="text" id="email" placeholder="邮箱">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<div class="controls">
+						<button type="submit" class="btn">发送成绩</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 </body>
 </html>

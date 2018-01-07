@@ -5,5 +5,10 @@ return array(
 		'__IMG__'    => __ROOT__ . '/Public/' . MODULE_NAME . '/images',
 		'__CSS__'    => __ROOT__ . '/Public/' . MODULE_NAME . '/css',
 		'__JS__'     => __ROOT__ . '/Public/' . MODULE_NAME . '/js'
-	)
+	),
+
+	// 'URL_ROUTER_ON' => true,
+	// 'URL_ROUTE_RULES' => array(
+	// 	'achievement/:achievementId'	=> 'achievement/index/achievementId/:1'
+	// )
 );

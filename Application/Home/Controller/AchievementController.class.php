@@ -4,8 +4,11 @@ namespace Home\Controller;
 use Think\Controller;
 
 class AchievementController extends Controller {
-    public function index(){
-    	
+    public function index($achievementId){
+
+        $achievement = M('Achievement')->find($achievementId);
+
+        $this->assign('achievement', $achievement);
 
         $this->display();
     }
