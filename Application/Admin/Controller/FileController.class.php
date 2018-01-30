@@ -33,4 +33,9 @@ class FileController extends AdminController {
 		$this->ajaxReturn($return);
 	}
 
+	public function verify_code() {
+		$Verify = new \Think\Verify();
+		$Verify->entry();
+	}
+
 }

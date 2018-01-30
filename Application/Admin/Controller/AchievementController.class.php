@@ -174,7 +174,7 @@ class AchievementController extends AdminController{
 
 		// excel headers
 		for ($col = 0; $col < $maxCol; $col++) {
-			$cellValue = $sheet->getCellByColumnAndRow($col, 1)->getValue();
+			$cellValue = (string)$sheet->getCellByColumnAndRow($col, 1)->getCalculatedValue();
 			
 			array_push($headers, $cellValue);
 		}
@@ -182,7 +182,7 @@ class AchievementController extends AdminController{
 		for ($row = 2; $row <= $maxRow ; $row++) {
 			$data = array('pid'=>$pid, 'detail'=>array());
 			for ($col = 0; $col < $maxCol; $col++) {
-				$cellValue = $sheet->getCellByColumnAndRow($col, $row)->getValue();
+				$cellValue = (string)$sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
 				$key = $headers[$col];
 				if ($key == '姓名') {
@@ -197,6 +197,7 @@ class AchievementController extends AdminController{
 			}
 
 			$data['detail'] = json_encode($data['detail']);
+
 			array_push($dataList, $data);
 		}
 

@@ -3,18 +3,25 @@ namespace Admin\Controller;
 
 class UserController extends AdminController{
 	public function login(){
+
 		if(!IS_POST){
 			return $this->display();
 		}
 
 		$validate = array(
 			array('username', 'require', '请输入用户名', 1),
-			array('password', 'require', '请输入密码', 1)
+			array('password', 'require', '请输入密码', 1),
+			array('verify', 'require', '请输入验证码', 1)
 		);
 		$LoginUser = D('AdminUser');
 		$data = $LoginUser->validate($validate)->create();
 		if(!$data){
 			$this->errorInput($LoginUser->getError(), 'User/login', array('username'));
+		}
+
+		$Verify = new \Think\Verify();
+		if (!$Verify->check(I('post.verify'))) {
+			$this->errorInput(array('verify'=>'验证码不正确'), 'User/login', array('username'));
 		}
 		
 		$user = $LoginUser->where(array('username'=>$data['username']))->find();

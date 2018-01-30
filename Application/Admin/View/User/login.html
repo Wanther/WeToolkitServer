@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
 <style type="text/css">
 .panel-login{
-	max-width: 500px;
+	max-width: 400px;
 	margin: 0 auto;
 }
 </style>
@@ -40,9 +40,17 @@
 					<input type="password" name="password" />
 				</bs:controlGroup> 
 
+				<bs:controlGroup field="verify" label="验证码">
+					<input type="text" name="verify" />
+				</bs:controlGroup> 
+
+				<div class="control-group">
+					<div class="controls"><img src="{:U('File/verify_code')}"/></div>
+				</div>
+
 				<div class="control-group">
 					<div class="controls">
-						<input type="submit" class="btn btn-primary span2" value="登录"/>
+						<button type="submit" class="btn btn-block btn-primary">登录</button>
 					</div>
 				</div>
 			</form>
@@ -54,7 +62,7 @@
 	var _hmt = _hmt || [];
 	(function() {
 		var hm = document.createElement("script");
-		hm.src = "//hm.baidu.com/hm.js?d89bbb8b77a16f531f3aa74cc25b944c";
+		hm.src = "//hm.baidu.com/hm.js?adf9d11544ac9cf2161781a6087600df";
 		var s = document.getElementsByTagName("script")[0]; 
 		s.parentNode.insertBefore(hm, s);
 	})();

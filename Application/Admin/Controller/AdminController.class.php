@@ -6,7 +6,7 @@ use \Common\Controller\AppController;
 abstract class AdminController extends AppController{
 	protected $accessControl = array(
 		'public'=>array(
-			'User/login', 'User/logout'
+			'User/login', 'User/logout', 'File/verify_code'
 		)
 	);
 
