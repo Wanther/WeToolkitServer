@@ -14,6 +14,8 @@ return array(
 
 	'RES_ROOT'	=>	__ROOT__.'/Public',
 
+	'DEFAULT_FILTER'	=>	null,
+
 	'JPUSH_APPKEY_WLT'	=>	'7047c8d0660faa20afffb520',
 	'JPUSH_SECRET_WLT'	=>	'baf6cfbed085c5fdce44c875'
 );

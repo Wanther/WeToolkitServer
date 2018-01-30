@@ -10,12 +10,15 @@
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="__STATIC__/font-awesome/css/font-awesome-ie7.min.css">
 <![endif]-->
-<link type="text/css" rel="stylesheet" href="__CSS__/style.css" />
 <link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap-2.3.2/css/bootstrap-responsive.min.css" />
 <style type="text/css">
 .panel-login{
-	max-width: 400px;
+	max-width: 240px;
 	margin: 0 auto;
+}
+.logo {
+	width: 144px;
+	margin: 40px auto 20px auto;
 }
 </style>
 <script type="text/javascript" src="__STATIC__/jquery/jquery-1.10.2.min.js"></script>
@@ -26,26 +29,35 @@
 </head>
 <body>
 	<div class="container">
+
+		<div class="logo">
+			<img src="__IMG__/logo.png"/>
+		</div>
+
 		<div class="panel-login">
 
-			<bs:actionError />
+			<form action="{:U('User/login')}" method="post">
 
-			<form action="{:U('User/login')}" method="post" class="form-horizontal">
+				<div class="control-group">
+					<div class="controls">
+						<bs:actionError />
+					</div>
+				</div>
 
-				<bs:controlGroup field="username" label="用户名">
-					<input type="text" name="username" value="{$data.username|default=''}" />
+				<bs:controlGroup field="username">
+					<input type="text" class="input-block-level" name="username" value="{$data.username|default=''}" placeholder="用户名" />
 				</bs:controlGroup> 
 
-				<bs:controlGroup field="password" label="密码">
-					<input type="password" name="password" />
+				<bs:controlGroup field="password">
+					<input type="password" class="input-block-level" name="password" placeholder="密码" />
 				</bs:controlGroup> 
 
-				<bs:controlGroup field="verify" label="验证码">
-					<input type="text" name="verify" />
+				<bs:controlGroup field="verify">
+					<input type="text" class="input-block-level" name="verify" placeholder="验证码" />
 				</bs:controlGroup> 
 
 				<div class="control-group">
-					<div class="controls"><img src="{:U('File/verify_code')}"/></div>
+					<div class="controls"><img src="{:U('File/verify_code')}" class="img-rounded" style="width:100%"/></div>
 				</div>
 
 				<div class="control-group">
@@ -53,6 +65,7 @@
 						<button type="submit" class="btn btn-block btn-primary">登录</button>
 					</div>
 				</div>
+
 			</form>
 
 		</div>

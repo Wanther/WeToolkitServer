@@ -75,6 +75,7 @@ class ApiEmulatorController extends AdminController {
 
 		if (IS_POST) {
 			$data = $ApiEmulator->create();
+			
 			if (!$data) {
 				$this->errorInput($ApiEmulator->getError(), 'ApiEmulator/edit');
 			}
@@ -112,5 +113,14 @@ class ApiEmulatorController extends AdminController {
 		}
 
 		$this->successMessage('删除成功', get_return_url(U('ApiEmulator/lists')));
+	}
+
+	public function repairJson() {
+		$dataList = M('ApiEmulator')->field('id,content')->select();
+		foreach ($dataList as $value) {
+			M('ApiEmulator')->where(array('id'=>$value['id']))->setField(array('content'=>htmlspecialchars_decode($value['content'])));
+		}
+		
+		$this->success('success');
 	}
 }

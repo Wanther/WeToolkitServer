@@ -21,7 +21,7 @@ class ApiEmulatorController extends Controller {
 		}
 		$ApiEmulator = M('ApiEmulator');
 		$api = $ApiEmulator->field('content')->find($id);
-		$this->ajaxReturn(json_decode(htmlspecialchars_decode($api['content'])));
+		$this->ajaxReturn(json_decode($api['content']));
 	}
 
 	public function match_output() {
@@ -33,7 +33,7 @@ class ApiEmulatorController extends Controller {
 		if (!empty($apiList)) {
 			foreach ($apiList as $api) {
 				if ($this->isPathMatch($path, $api['path_match'])) {
-					$this->ajaxReturn(json_decode(htmlspecialchars_decode($api['content'])));
+					$this->ajaxReturn(json_decode($api['content']));
 					return;
 				}
 			}
