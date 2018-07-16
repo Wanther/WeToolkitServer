@@ -1,0 +1,63 @@
+<extend name="Public/base" />
+
+<block name="style">
+<style type="text/css">
+.controls div{
+	padding-top: 5px;
+	margin-bottom: 5px;
+}
+</style>
+</block>
+
+<block name="content">
+	<form action="<notempty name='data.id'>{:U('NewStudent/update')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
+
+	<notempty name='data.id'> 
+		<input type="hidden" name="id" value="{$data.id}" />
+	</notempty> 
+
+	<bs:controlGroup field="exam_num" label="考号">
+		<div>{$data.exam_num|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="name" label="姓名">
+		<div>{$data.name|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="gender" label="性别">
+		<div>{$data.gender|lookup_value="GENDER",###}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="nation" label="民族">
+		<div>{$data.nation|lookup_value="NATION",###}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="exam_score" label="中考分数">
+		<div>{$data.exam_score|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="address" label="家庭住址">
+		<div>{$data.address|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="phone" label="联系电话">
+		<div>{$data.phone|default=''}</div>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="is_payed" label="交费">
+		<input type="checkbox" name="is_payed" value="Y" <eq name="data['is_payed']" value="Y"> checked</eq>/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="desc_txt_02" label="备注（总务处）">
+		<textarea name="desc_txt_02">{$data.desc_txt_02|default=''}</textarea>
+	</bs:controlGroup> 
+
+	<div class="control-group">
+		<div class="controls">
+			<input type="submit" class="btn btn-primary" value="保存" />
+			<a href="{:get_return_url(U('NewStudent/lists'))}" class="btn btn-info">返回</a>
+		</div>
+	</div>
+
+	</form>
+</block>

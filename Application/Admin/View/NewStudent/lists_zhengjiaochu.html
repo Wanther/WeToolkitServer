@@ -1,0 +1,66 @@
+<extend name="Public/base"/>
+
+<block name="content">
+
+	<div class="btn-group pull-right">
+		
+	</div>
+
+	<form action="{:U('NewStudent/lists')}" class="form-search">
+		{:W('Form/searchInput', array('name', '姓名'))}
+		<button type="submit" class="btn"><span class="icon-search"></span> 查询</button>
+	</form>
+
+	<form action="{:U('NewStudent/lists')}" method="post" role="form" id="data-form">
+
+		<table class="table table-hover table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th class="column-check">
+						<input type="checkbox" check-group=":checkbox[name='id[]']"/>
+					</th>
+					<th>考号</th>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>民族</th>
+					<th>分数</th>
+					<th>电话</th>
+					<th>服装</th>
+					<th>交费</th>
+					<th>住校</th>
+					<th>PAD</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<volist name="dataList" id="data">
+				<tr>
+					<td>
+						<input type="checkbox" name="id[]" value="{$data.id}"/>
+					</td>
+					<td>{$data.exam_num}</td>
+					<td>{$data.name}</td>
+					<td>{$data.gender|lookup_value="GENDER",###}</td>
+					<td>{$data.nation|lookup_value="NATION",###}</td>
+					<td>{$data.exam_score}</td>
+					<td>{$data.phone}</td>
+					<td>{$data.dress_size}</td>
+					<td>{$data.is_payed}</td>
+					<td>{$data.is_stay}</td>
+					<td>{$data.is_pad}</td>
+					<td>
+						<a class="btn btn-mini btn-warning app-btn" href="{:U('NewStudent/edit', array('id'=>$data['id']))}">编辑</a>
+					</td>
+				</tr>
+				</volist> 
+			</tbody>
+		</table>
+
+	</form>
+
+	<div class="pagination">
+		{$page}
+	</div>
+	
+</block>

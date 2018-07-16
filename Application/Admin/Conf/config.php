@@ -101,6 +101,12 @@ return array(
 					'name'	=>	'成绩管理',
 					'icon'	=>	'icon-mobile-phone',
 					'action'	=>	'Achievement/lists'
+				),
+				array(
+					'id'	=>	403,
+					'name'	=>	'新生管理',
+					'icon'	=>	'icon-mobile-phone',
+					'action'	=>	'NewStudent/lists'
 				)
 			)
 		),
@@ -114,6 +120,19 @@ return array(
 					'name'	=>	'地图分布',
 					'icon'	=>	'icon-map-marker',
 					'action'	=>	'Map/lists'
+				)
+			)
+		),
+		array(
+			'id'	=>	10006,
+			'name'	=>	'售后',
+			'icon'	=>	'icon-usd',
+			'children'	=>	array(
+				array(
+					'id'	=>	601,
+					'name'	=>	'返修',
+					'icon'	=>	'icon-map-marker',
+					'acyion'	=>	'CustomerService/lists'
 				)
 			)
 		)
