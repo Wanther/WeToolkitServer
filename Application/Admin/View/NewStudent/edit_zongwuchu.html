@@ -10,7 +10,7 @@
 </block>
 
 <block name="content">
-	<form action="<notempty name='data.id'>{:U('NewStudent/update')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
+	<form action="<notempty name='data.id'>{:U('NewStudent/edit')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
 
 	<notempty name='data.id'> 
 		<input type="hidden" name="id" value="{$data.id}" />
@@ -24,28 +24,17 @@
 		<div>{$data.name|default=''}</div>
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="gender" label="性别">
-		<div>{$data.gender|lookup_value="GENDER",###}</div>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="nation" label="民族">
-		<div>{$data.nation|lookup_value="NATION",###}</div>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="exam_score" label="中考分数">
-		<div>{$data.exam_score|default=''}</div>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="address" label="家庭住址">
-		<div>{$data.address|default=''}</div>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="phone" label="联系电话">
-		<div>{$data.phone|default=''}</div>
+	<bs:controlGroup field="id_card_no" label="身份证">
+		<div>{$data.id_card_no|default=''}</div>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="is_payed" label="交费">
-		<input type="checkbox" name="is_payed" value="Y" <eq name="data['is_payed']" value="Y"> checked</eq>/>
+		<label class="radio inline">
+			<input type="radio" name="is_payed" value="Y" <eq name="data['is_payed']" value="Y"> checked</eq>/> 是
+		</label>
+		<label class="radio inline">
+			<input type="radio" name="is_payed" value="N" <eq name="data['is_payed']" value="N"> checked</eq>/> 否
+		</label>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="desc_txt_02" label="备注（总务处）">

@@ -10,7 +10,7 @@
 </block>
 
 <block name="content">
-	<form action="<notempty name='data.id'>{:U('NewStudent/update')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
+	<form action="<notempty name='data.id'>{:U('NewStudent/edit')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
 
 	<notempty name='data.id'> 
 		<input type="hidden" name="id" value="{$data.id}" />
@@ -24,28 +24,64 @@
 		<div>{$data.name|default=''}</div>
 	</bs:controlGroup> 
 
+	<bs:controlGroup field="id_card_no" label="身份证">
+		<div>{$data.id_card_no|default=''}</div>
+	</bs:controlGroup> 
+
 	<bs:controlGroup field="gender" label="性别">
-		<div>{$data.gender|lookup_value="GENDER",###}</div>
+		{:W('Form/lookupSelect', array('gender', $data['gender'], 'GENDER'))} 
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="nation" label="民族">
-		<div>{$data.nation|lookup_value="NATION",###}</div>
+		{:W('Form/lookupSelect', array('nation', $data['nation'], 'NATION'))} 
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="exam_score" label="中考分数">
-		<div>{$data.exam_score|default=''}</div>
+	<bs:controlGroup field="major" label="专业">
+		{:W('Form/lookupSelect', array('major', $data['major'], 'MAJOR'))} 
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="shape" label="体型">
+		{:W('Form/lookupSelect', array('shape', $data['shape'], 'BODY_SHAPE'))} 
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="height" label="身高">
+		<input type="text" name="height" value="{$data.height|default=''}"/> 厘米
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="weight" label="体重">
+		<input type="text" name="weight" value="{$data.weight|default=''}"/> 公斤
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="shoe_size" label="鞋码">
+		<input type="text" name="shoe_size" value="{$data.shoe_size|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="middle_school" label="初中学校">
+		<input type="text" name="middle_school" value="{$data.middle_school|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="middle_school_class" label="初中班级">
+		<input type="text" name="middle_school_class" value="{$data.middle_school_class|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="father_name" label="父亲姓名">
+		<input type="text" name="father_name" value="{$data.father_name|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="father_phone" label="父亲电话">
+		<input type="text" name="father_phone" value="{$data.father_phone|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="mother_name" label="母亲姓名">
+		<input type="text" name="mother_name" value="{$data.mother_name|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="mother_phone" label="母亲电话">
+		<input type="text" name="mother_phone" value="{$data.mother_phone|default=''}"/>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="address" label="家庭住址">
-		<div>{$data.address|default=''}</div>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="phone" label="联系电话">
-		<div>{$data.phone|default=''}</div>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="dress_size" label="服装尺寸">
-		<input type="text" name="dress_size" value="{$data.dress_size|default=''}"/>
+		<input type="text" name="address" value="{$data.address|default=''}"/>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="desc_txt_03" label="备注（政教处）">

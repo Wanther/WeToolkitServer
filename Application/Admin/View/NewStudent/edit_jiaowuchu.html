@@ -15,24 +15,8 @@
 		<input type="text" name="name" value="{$data.name|default=''}"/>
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="gender" label="性别">
-		{:W('Form/lookupSelect', array('gender', $data['gender'], 'GENDER'))} 
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="nation" label="民族">
-		{:W('Form/lookupSelect', array('nation', $data['nation'], 'NATION'))} 
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="exam_score" label="中考分数">
-		<input type="text" name="exam_score" value="{$data.exam_score|default=''}"/>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="address" label="家庭住址">
-		<input type="text" name="address" value="{$data.address|default=''}"/>
-	</bs:controlGroup> 
-
-	<bs:controlGroup field="phone" label="联系电话">
-		<input type="text" name="phone" value="{$data.phone|default=''}"/>
+	<bs:controlGroup field="id_card_no" label="身份证号">
+		<input type="text" name="id_card_no" value="{$data.id_card_no|default=''}"/>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="desc_txt_01" label="备注（教务处）">

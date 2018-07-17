@@ -9,13 +9,16 @@ class NewStudentModel extends Model{
 	protected $patchValidate = true;
 
 	protected $_validate = array(
-		array('exam_num', 'require', '请填写考号', self::MUST_VALIDATE),
-		array('exam_num', 'integer', '请填写中考分数', self::MUST_VALIDATE),
-		array('exam_num', '', '该考号已经存在！', self::MUST_VALIDATE, 'unique', self::MODEL_BOTH),
-		array('name', 'require', '请填写姓名', self::MUST_VALIDATE),
-		array('gender', array(1, 2), '请选择性别', self::MUST_VALIDATE, 'in'),
-		array('nation', 'require', '请选择民族', self::MUST_VALIDATE),
-		array('exam_score', '/^\d+(\.\d)?$/', '请填写中考分数，例：600,600.5', self::MUST_VALIDATE, 'regex')
+		array('exam_num', 'require', '请填写考号', self::EXISTS_VALIDATE),
+		array('exam_num', 'integer', '请填写中考分数', self::EXISTS_VALIDATE),
+		array('exam_num', '', '该考号已经存在！', self::EXISTS_VALIDATE, 'unique', self::MODEL_BOTH),
+		array('name', 'require', '请填写姓名', self::EXISTS_VALIDATE),
+		array('id_card_no', '/^\d{17}(\d|[Xx])$/', '请填写正确的身份证号', self::EXISTS_VALIDATE, 'regex'),
+		array('height', 'integer', '请填写身高', self::EXISTS_VALIDATE),
+		array('weight', 'integer', '请填写体重', self::EXISTS_VALIDATE),
+		array('shoe_size', 'integer', '请填写鞋码', self::EXISTS_VALIDATE),
+		array('father_phone', '/^\d{8}|\d{11}|\d{12}$/', '请填写父亲电话', self::EXISTS_VALIDATE, 'regex'),
+		array('mother_phone', '/^\d{8}|\d{11}|\d{12}$/', '请填写母亲电话', self::EXISTS_VALIDATE, 'regex')
 	);
 
 	protected $_auto = array(

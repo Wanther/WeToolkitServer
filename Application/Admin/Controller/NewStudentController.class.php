@@ -63,14 +63,17 @@ class NewStudentController extends AdminController{
 		$NewStudent = D('NewStudent');
 
 		if (IS_POST) {
+
+			$origin = $NewStudent->find($id);
+
 			$data = $NewStudent->create();
 			if (!$data) {
-				$this->errorInput($NewStudent->getError(), "NewStudent/{$this->getViewName()}");
+				$this->errorInput($NewStudent->getError(), "NewStudent/edit_{$this->getViewName()}", array(), array(), $origin);
 			}
 
 			$NewStudent->save();
 
-			$this->successMessage('操作成功', get_return_url('NewStudent/lists'));
+			$this->successMessage('操作成功', get_return_url("NewStudent/lists"));
 		} else {
 			$data = $NewStudent->field(true)->find($id);
 			$this->assign('data', $data);
@@ -79,7 +82,7 @@ class NewStudentController extends AdminController{
 		}
 	}
 
-	public function update($id) {
+	/*public function update($id) {
 		$this->authView(403);
 
 		if (!IS_POST) {
@@ -96,7 +99,7 @@ class NewStudentController extends AdminController{
 
 		$this->successMessage('操作成功', get_return_url('NewStudent/lists'));
 
-	}
+	}*/
 
 	public function delete(){
 		$this->authView(403);
