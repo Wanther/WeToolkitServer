@@ -14,11 +14,11 @@ class NewStudentModel extends Model{
 		array('exam_num', '', '该考号已经存在！', self::EXISTS_VALIDATE, 'unique', self::MODEL_BOTH),
 		array('name', 'require', '请填写姓名', self::EXISTS_VALIDATE),
 		array('id_card_no', '/^\d{17}(\d|[Xx])$/', '请填写正确的身份证号', self::EXISTS_VALIDATE, 'regex'),
-		array('height', 'integer', '请填写身高', self::EXISTS_VALIDATE),
-		array('weight', 'integer', '请填写体重', self::EXISTS_VALIDATE),
-		array('shoe_size', 'integer', '请填写鞋码', self::EXISTS_VALIDATE),
-		array('father_phone', '/^\d{8}|\d{11}|\d{12}$/', '请填写父亲电话', self::EXISTS_VALIDATE, 'regex'),
-		array('mother_phone', '/^\d{8}|\d{11}|\d{12}$/', '请填写母亲电话', self::EXISTS_VALIDATE, 'regex')
+		array('height', 'integer', '请填写身高', self::VALUE_VALIDATE),
+		array('weight', 'integer', '请填写体重', self::VALUE_VALIDATE),
+		array('shoe_size', 'integer', '请填写鞋码', self::VALUE_VALIDATE),
+		array('father_phone', '/^\d{8}|\d{11}|\d{12}$/', '请填写父亲电话', self::VALUE_VALIDATE, 'regex'),
+		array('mother_phone', '/^\d{8}|\d{11}|\d{12}$/', '请填写母亲电话', self::VALUE_VALIDATE, 'regex')
 	);
 
 	protected $_auto = array(
