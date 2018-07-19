@@ -96,4 +96,9 @@ class LookupController extends AdminController{
 		$this->successMessage('删除成功', get_return_url(U('Lookup/lists')));
 	}
 
+	public function query($type) {
+		$dataList = $Lookup = D('Common/Lookup')->field("id,type,name,val")->where(array('type'=>$type))->order("seq_num")->select();
+		$this->ajaxReturn($dataList);
+	}
+
 }

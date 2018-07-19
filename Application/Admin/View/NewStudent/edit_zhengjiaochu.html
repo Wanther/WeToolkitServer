@@ -7,6 +7,11 @@
 	margin-bottom: 5px;
 }
 </style>
+<link rel="stylesheet" type="text/css" href="__STATIC__/listpanel/listpanel.css">
+</block>
+
+<block name="script">
+<script type="text/javascript" src="__STATIC__/listpanel/listpanel.js"></script>
 </block>
 
 <block name="content">
@@ -57,11 +62,20 @@
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="middle_school" label="初中学校">
-		<input type="text" name="middle_school" value="{$data.middle_school|default=''}"/>
+		<input type="text" id="middle_school" name="middle_school" value="{$data.middle_school|default=''}"/>
 	</bs:controlGroup> 
+	<script type="text/javascript">
+	(function($) {
+		$('#middle_school').listPanel({url: '{:U("Lookup/query?type=MIDDLE_SCHOOL")}', converter: function(item) {
+			return item.val;
+		}, onclick: function(text) {
+			$('#middle_school').val(text);
+		}});
+	})(jQuery);
+	</script>
 
 	<bs:controlGroup field="middle_school_class" label="初中班级">
-		<input type="text" name="middle_school_class" value="{$data.middle_school_class|default=''}"/>
+		{:W('Form/lookupSelect', array('middle_school_class', $data['middle_school_class'], 'MIDDLE_SCHOOL_CLASS'))} 
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="father_name" label="父亲姓名">

@@ -46,7 +46,7 @@
 					<td>{$data.gender|lookup_value="GENDER",###}</td>
 					<td>{$data.nation|lookup_value="NATION",###}</td>
 					<td>{$data.major|lookup_value="MAJOR",###}</td>
-					<td>{$data.middle_school}{$data.middle_school_class}</td>
+					<td>{$data.middle_school}{$data.middle_school_class|lookup_value="MIDDLE_SCHOOL_CLASS",###}班</td>
 					<td>{$data.height}</td>
 					<td>{$data.weight}</td>
 					<td>{$data.shoe_size}</td>
