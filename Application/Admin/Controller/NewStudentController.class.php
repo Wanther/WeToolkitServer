@@ -119,6 +119,101 @@ class NewStudentController extends AdminController{
 		$this->successMessage('删除成功', get_return_url(U('NewStudent/lists')));
 	}
 
+	public function exportExcel() {
+		$this->authView(403);
+
+		$dataList = D('NewStudent')->field('created,created_by,last_upd,last_upd_by', true)->select();
+
+		if (empty($dataList)) {
+			$this->error('没有可导出的数据');
+		}
+
+		Vendor('PHPExcel.PHPExcel');
+
+		$excel = new \PHPExcel();
+		$excel->getProperties()->setCreator($this->getViewName())
+			->setLastModifiedBy($this->getViewName())
+			->setTitle("新生报到");
+
+		$sheet = $excel->setActiveSheetIndex(0);
+		$sheet->setTitle('新生');
+
+		$headerMapping = array(
+			'id' => 'ID',
+			'exam_num' => '考号',
+			'name' => '姓名',
+			'id_card_no' => '身份证号',
+			'gender' => '性别',
+			'nation' => '民族',
+			'major' => '专业',
+			'is_payed' => '交费',
+			'is_stay' => '住宿',
+			'is_pad' => 'PAD',
+			'height' => '身高',
+			'weight' => '体重',
+			'shoe_size' => '鞋码',
+			'shape' => '体型',
+			'middle_school' => '初中',
+			'middle_school_class' => '初中班级',
+			'father_name' => '父亲姓名',
+			'father_phone' => '父亲电话',
+			'mother_name' => '母亲姓名',
+			'mother_phone' => '母亲电话',
+			'address' => '地址',
+			'desc_txt_01' => '备注（教务处）',
+			'desc_txt_02' => '备注（总务处）',
+			'desc_txt_03' => '备注（政教处）',
+			'desc_txt_04' => '备注（生活处）',
+			'desc_txt_05' => '备注（电教处）'
+		);
+
+		$column = 0;
+		foreach ($headerMapping as $key => $value) {
+			$sheet->setCellValueExplicitByColumnAndRow($column, 1, $value);
+			$column++;
+		}
+
+		$row = 2;
+		foreach ($dataList as $value) {
+			$column = 0;
+			foreach ($headerMapping as $k => $v) {
+				$cellValue = $value[$k];
+				switch ($k) {
+					case 'gender':
+						$cellValue = lookup_value('GENDER', $cellValue);
+						break;
+
+					case 'nation':
+						$cellValue = lookup_value('NATION', $cellValue);
+						break;
+
+					case 'major':
+						$cellValue = lookup_value('MAJOR', $cellValue);
+						break;
+
+					case 'middle_school_class':
+						$cellValue = lookup_value('MIDDLE_SCHOOL_CLASS', $cellValue);
+						break;
+
+					case 'shape':
+						$cellValue = lookup_value('BODY_SHAPE', $cellValue);
+						break;
+				}
+				$sheet->setCellValueExplicitByColumnAndRow($column, $row, $cellValue);
+				$column++;
+			}
+			$row++;
+		}
+		
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header("Content-Disposition: attachment; filename=\"$fileName\"");
+		header('Cache-Control: max-age=0');
+
+		\PHPExcel_IOFactory::createWriter($excel, 'Excel2007')->save('php://output');
+
+		exit;
+	}
+
 	protected function getViewName() {
 		$view = \Admin\Model\AdminUserModel::$loginUser['username'];
 		if ($view == 'wangzaiyou') {

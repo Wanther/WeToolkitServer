@@ -7,6 +7,11 @@
 	margin-bottom: 5px;
 }
 </style>
+<link rel="stylesheet" type="text/css" href="__STATIC__/listpanel/listpanel.css">
+</block>
+
+<block name="script">
+<script type="text/javascript" src="__STATIC__/listpanel/listpanel.js"></script>
 </block>
 
 <block name="content">
@@ -17,39 +22,89 @@
 	</notempty> 
 
 	<bs:controlGroup field="exam_num" label="考号">
-		<div>{$data.exam_num|default=''}</div>
+		<input type="text" name="exam_num" value="{$data.exam_num|default=''}"/>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="name" label="姓名">
-		<div>{$data.name|default=''}</div>
+		<input type="text" name="name" value="{$data.name|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="id_card_no" label="身份证号">
+		<input type="text" name="id_card_no" value="{$data.id_card_no|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="is_payed" label="交费">
+		<label class="radio inline">
+			<input type="radio" name="is_payed" value="Y" <eq name="data['is_payed']" value="Y"> checked</eq>/> 是
+		</label>
+		<label class="radio inline">
+			<input type="radio" name="is_payed" value="N" <eq name="data['is_payed']" value="N"> checked</eq>/> 否
+		</label>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="gender" label="性别">
-		<div>{$data.gender|lookup_value="GENDER",###}</div>
+		{:W('Form/lookupSelect', array('gender', $data['gender'], 'GENDER'))} 
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="nation" label="民族">
-		<div>{$data.nation|lookup_value="NATION",###}</div>
+		{:W('Form/lookupSelect', array('nation', $data['nation'], 'NATION'))} 
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="height,weight,shoe_size,shape" label="身形鞋码">
-		<div>{$data.height|default=''}厘米，{$data.weight|default=''}公斤，{$data.shoe_size|default=''}鞋码，{$data.shape|lookup_value="BODY_SHAPE",###}</div>
+	<bs:controlGroup field="major" label="专业">
+		{:W('Form/lookupSelect', array('major', $data['major'], 'MAJOR'))} 
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="id_card_no" label="身份证">
-		<div>{$data.id_card_no|default=''}</div>
+	<bs:controlGroup field="shape" label="体型">
+		{:W('Form/lookupSelect', array('shape', $data['shape'], 'BODY_SHAPE'))} 
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="father_name,father_phone" label="父亲">
-		<div>{$data.father_name|default=''} {$data.father_phone|default=''}</div>
+	<bs:controlGroup field="height" label="身高">
+		<input type="text" name="height" value="{$data.height|default=''}"/> 厘米
 	</bs:controlGroup> 
 
-	<bs:controlGroup field="mother_name,mother_phone" label="母亲">
-		<div>{$data.mother_name|default=''} {$data.mother_phone|default=''}</div>
+	<bs:controlGroup field="weight" label="体重">
+		<input type="text" name="weight" value="{$data.weight|default=''}"/> 公斤
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="shoe_size" label="鞋码">
+		<input type="text" name="shoe_size" value="{$data.shoe_size|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="middle_school" label="初中学校">
+		<input type="text" id="middle_school" name="middle_school" value="{$data.middle_school|default=''}"/>
+	</bs:controlGroup> 
+	<script type="text/javascript">
+	(function($) {
+		$('#middle_school').listPanel({url: '{:U("Lookup/query?type=MIDDLE_SCHOOL")}', converter: function(item) {
+			return item.val;
+		}, onclick: function(text) {
+			$('#middle_school').val(text);
+		}});
+	})(jQuery);
+	</script>
+
+	<bs:controlGroup field="middle_school_class" label="初中班级">
+		{:W('Form/lookupSelect', array('middle_school_class', $data['middle_school_class'], 'MIDDLE_SCHOOL_CLASS'))} 
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="father_name" label="父亲姓名">
+		<input type="text" name="father_name" value="{$data.father_name|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="father_phone" label="父亲电话">
+		<input type="text" name="father_phone" value="{$data.father_phone|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="mother_name" label="母亲姓名">
+		<input type="text" name="mother_name" value="{$data.mother_name|default=''}"/>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="mother_phone" label="母亲电话">
+		<input type="text" name="mother_phone" value="{$data.mother_phone|default=''}"/>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="address" label="家庭住址">
-		<div>{$data.address|default=''}</div>
+		<input type="text" name="address" value="{$data.address|default=''}"/>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="is_pad" label="PAD">
@@ -59,6 +114,31 @@
 		<label class="radio inline">
 			<input type="radio" name="is_pad" value="N" <eq name="data['is_pad']" value="N"> checked</eq>/> 否
 		</label>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="is_stay" label="住校">
+		<label class="radio inline">
+			<input type="radio" name="is_stay" value="Y" <eq name="data['is_stay']" value="Y"> checked</eq>/> 是
+		</label>
+		<label class="radio inline">
+			<input type="radio" name="is_stay" value="N" <eq name="data['is_stay']" value="N"> checked</eq>/> 否
+		</label>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="desc_txt_01" label="备注（教务处）">
+		<textarea name="desc_txt_01">{$data.desc_txt_01|default=''}</textarea>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="desc_txt_02" label="备注（总务处）">
+		<textarea name="desc_txt_02">{$data.desc_txt_02|default=''}</textarea>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="desc_txt_03" label="备注（政教处）">
+		<textarea name="desc_txt_03">{$data.desc_txt_03|default=''}</textarea>
+	</bs:controlGroup> 
+
+	<bs:controlGroup field="desc_txt_04" label="备注（生活处）">
+		<textarea name="desc_txt_04">{$data.desc_txt_04|default=''}</textarea>
 	</bs:controlGroup> 
 
 	<bs:controlGroup field="desc_txt_05" label="备注（电教处）">
