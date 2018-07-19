@@ -206,7 +206,7 @@ class NewStudentController extends AdminController{
 		}
 		
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header("Content-Disposition: attachment; filename=\"$fileName\"");
+		header("Content-Disposition: attachment; filename=\"new_student.xls\"");
 		header('Cache-Control: max-age=0');
 
 		\PHPExcel_IOFactory::createWriter($excel, 'Excel5')->save('php://output');
