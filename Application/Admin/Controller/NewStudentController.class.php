@@ -209,7 +209,7 @@ class NewStudentController extends AdminController{
 		header("Content-Disposition: attachment; filename=\"$fileName\"");
 		header('Cache-Control: max-age=0');
 
-		\PHPExcel_IOFactory::createWriter($excel, 'Excel2007')->save('php://output');
+		\PHPExcel_IOFactory::createWriter($excel, 'Excel5')->save('php://output');
 
 		exit;
 	}
