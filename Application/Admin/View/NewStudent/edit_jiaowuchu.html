@@ -1,6 +1,7 @@
 <extend name="Public/base" />
 
 <block name="content">
+
 	<form action="<notempty name='data.id'>{:U('NewStudent/edit')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
 
 	<notempty name='data.id'> 

@@ -10,6 +10,12 @@
 </block>
 
 <block name="content">
+
+	<ul class="breadcrumb">
+		<li><a href="{:U('NewStudent/lists')}">新生管理</a> <span class="divider">/</span></li>
+		<li class="active">编辑</li>
+	</ul>
+
 	<form action="<notempty name='data.id'>{:U('NewStudent/edit')}<else/>{:U('NewStudent/add')}</notempty>" method="post" class="form-horizontal">
 
 	<notempty name='data.id'> 

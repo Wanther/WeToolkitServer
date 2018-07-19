@@ -4,7 +4,7 @@ namespace Admin\Controller;
 class NewStudentController extends AdminController{
 
 	public function lists(){
-		$this->authView(403);
+		$this->authView(703);
 
 		$name = I('get.name');
 
@@ -35,7 +35,7 @@ class NewStudentController extends AdminController{
 	}
 
 	public function add(){
-		$this->authView(403);
+		$this->authView(703);
 
 		if(IS_POST){
 			$NewStudent = D('NewStudent');
@@ -58,7 +58,7 @@ class NewStudentController extends AdminController{
 	}
 
 	public function edit($id) {
-		$this->authView(403);
+		$this->authView(703);
 
 		$NewStudent = D('NewStudent');
 
@@ -83,7 +83,7 @@ class NewStudentController extends AdminController{
 	}
 
 	/*public function update($id) {
-		$this->authView(403);
+		$this->authView(703);
 
 		if (!IS_POST) {
 			$this->errorMessage('更新失败', 'NewStudent/lists');
@@ -102,7 +102,7 @@ class NewStudentController extends AdminController{
 	}*/
 
 	public function delete(){
-		$this->authView(403);
+		$this->authView(703);
 		$id = I('id');
 		if(empty($id)){
 			$this->errorMessage('请选择要删除的记录', get_return_url(U('NewStudent/lists')));
@@ -120,7 +120,7 @@ class NewStudentController extends AdminController{
 	}
 
 	public function exportExcel() {
-		$this->authView(403);
+		$this->authView(703);
 
 		$dataList = D('NewStudent')->field('created,created_by,last_upd,last_upd_by', true)->select();
 
@@ -133,7 +133,7 @@ class NewStudentController extends AdminController{
 		$excel = new \PHPExcel();
 		$excel->getProperties()->setCreator($this->getViewName())
 			->setLastModifiedBy($this->getViewName())
-			->setTitle("新生报到");
+			->setTitle("New Student");
 
 		$sheet = $excel->setActiveSheetIndex(0);
 		$sheet->setTitle('新生');

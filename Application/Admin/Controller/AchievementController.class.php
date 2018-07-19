@@ -4,7 +4,7 @@ namespace Admin\Controller;
 class AchievementController extends AdminController{
 
 	public function lists(){
-		$this->authView(402);
+		$this->authView(702);
 
 		$name = I('get.name');
 
@@ -35,7 +35,7 @@ class AchievementController extends AdminController{
 	}
 
 	public function add(){
-		$this->authView(402);
+		$this->authView(702);
 
 		if(IS_POST){
 			$Achievement = D('Achievement');
@@ -58,7 +58,7 @@ class AchievementController extends AdminController{
 	}
 
 	public function edit($id) {
-		$this->authView(402);
+		$this->authView(702);
 
 		$Achievement = D('Achievement');
 
@@ -79,7 +79,7 @@ class AchievementController extends AdminController{
 	}
 
 	public function delete(){
-		$this->authView(402);
+		$this->authView(702);
 		$id = I('id');
 		if(empty($id)){
 			$this->errorMessage('请选择要删除的记录', get_return_url(U('Achievement/lists')));
@@ -100,7 +100,7 @@ class AchievementController extends AdminController{
 	}
 
 	public function itemlist($id) {
-		$this->authView(402);
+		$this->authView(702);
 
 		$parent = M('Achievement')->find($id);
 
@@ -133,7 +133,7 @@ class AchievementController extends AdminController{
 
 	public function itemimport() {
 
-		$this->authView(402);
+		$this->authView(702);
 
 		$pid = I('post.pid');
 

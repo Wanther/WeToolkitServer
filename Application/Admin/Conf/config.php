@@ -88,25 +88,13 @@ return array(
 		array(
 			'id'	=>	10004,
 			'name'	=>	'内容',
-			'icon'	=>	'icon-bug',
+			'icon'	=>	'icon-book',
 			'children'	=>	array(
 				array(
 					'id'	=>	401,
 					'name'	=>	'单词',
 					'icon'	=>	'icon-mobile-phone',
 					'action'	=>	'Word/lists'
-				),
-				array(
-					'id'	=>	402,
-					'name'	=>	'成绩管理',
-					'icon'	=>	'icon-mobile-phone',
-					'action'	=>	'Achievement/lists'
-				),
-				array(
-					'id'	=>	403,
-					'name'	=>	'新生管理',
-					'icon'	=>	'icon-mobile-phone',
-					'action'	=>	'NewStudent/lists'
 				)
 			)
 		),
@@ -133,6 +121,25 @@ return array(
 					'name'	=>	'返修',
 					'icon'	=>	'icon-map-marker',
 					'acyion'	=>	'CustomerService/lists'
+				)
+			)
+		),
+		array(
+			'id'	=>	10007,
+			'name'	=>	'枣庄9中',
+			'icon'	=>	'icon-sitemap',
+			'children'	=>	array(
+				array(
+					'id'	=>	702,
+					'name'	=>	'成绩管理',
+					'icon'	=>	'icon-bar-chart',
+					'action'	=>	'Achievement/lists'
+				),
+				array(
+					'id'	=>	703,
+					'name'	=>	'新生管理',
+					'icon'	=>	'icon-group',
+					'action'	=>	'NewStudent/lists'
 				)
 			)
 		)
