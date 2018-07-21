@@ -64,8 +64,6 @@ function get_return_url($defaultUrl = ''){
 	$url = cookie('return_url');
 	if(empty($url)){
 		$url = $defaultUrl;
-	}else{
-		cookie('return_url', null);
 	}
 
 	return $url;
