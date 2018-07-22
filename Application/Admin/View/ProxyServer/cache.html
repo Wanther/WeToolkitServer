@@ -1,0 +1,22 @@
+<extend name="Public/base"/>
+
+<block name="content">
+
+	<form action="{:U('ProxyServer/deleteCache')}" method="post" class="form-horizontal">
+
+		<bs:controlGroup field="url" label="对应阿里云的URL">
+			<input type="text" name="url" class="input-xxlarge" value="{$data.url|default='https://padmedia.oss-cn-beijing.aliyuncs.com/apk/smartclass-release.apk'}"/>
+		</bs:controlGroup> 
+		
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" class="btn btn-primary" value="删除" />
+			</div>
+		</div>
+	</form>
+
+	<div>
+		{$result}
+	</div>
+	
+</block>

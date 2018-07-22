@@ -69,6 +69,12 @@ return array(
 					'name'	=>	'渠道包制作',
 					'icon'	=>	'icon-truck',
 					'action'	=>	'ChannelApk/make_channel_apk'
+				),
+				array(
+					'id'	=>	204,
+					'name'	=>	'代理服务器',
+					'icon'	=>	'icon-truck',
+					'action'	=>	'ProxyServer/cache'
 				)
 			)
 		),
