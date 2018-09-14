@@ -1,6 +1,6 @@
 <?php
 return array(
-	'MODULE_ALLOW_LIST'	=>	array('Home', 'Api', 'Admin'),
+	'MODULE_ALLOW_LIST'	=>	array('Home', 'Api', 'Admin', 'Wxpub'),
 	'MODULE_DENY_LIST'	=>	array('Common', 'Runtime', 'Data'),
 	'DEFAULT_MODULE'	=>	'Home',
 	'URL_MODEL'	=>	1,
